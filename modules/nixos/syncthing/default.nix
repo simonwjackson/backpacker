@@ -7,26 +7,25 @@
   ...
 }: let
   inherit (lib.mountainous) enabled;
+  inherit (lib.mountainous.util) allArchitectures getAllHosts;
+  inherit (lib.snowfall.fs) get-file;
 
   cfg = config.mountainous.syncthing;
 
-  systems = ../../../systems;
-  architectures = builtins.attrNames (builtins.readDir systems);
+  deviceListFromOthers = lib.mapAttrs (name: value: {id = value.device.id;}) cfg.otherDevices;
 
-  getHosts = arch: builtins.attrNames (builtins.readDir (systems + "/${arch}"));
-
-  importSyncthingConfig = arch: host: let
-    syncthingPath = systems + "/${arch}/${host}/syncthing.nix";
+  getSyncthingConfig = arch: host: let
+    syncthingPath = get-file "systems/${arch}/${host}/syncthing.nix";
   in
     if builtins.pathExists syncthingPath
     then import syncthingPath {inherit config host;}
     else null;
 
-  syncthingConfigs = builtins.listToAttrs (builtins.concatMap (
+  allSyncthingConfigs = builtins.listToAttrs (builtins.concatMap (
       arch:
         builtins.filter (item: item != null) (map (
           host: let
-            config = importSyncthingConfig arch host;
+            config = getSyncthingConfig arch host;
           in
             if config != null
             then {
@@ -34,27 +33,60 @@
               value = config;
             }
             else null
-        ) (getHosts arch))
+        ) (getAllHosts arch))
     )
-    architectures);
+    allArchitectures);
 
   getFolderDevices = name:
     lib.flatten (lib.mapAttrsToList
       (hostName: config: lib.optionals (config.paths ? "${name}") [hostName])
-      syncthingConfigs);
+      allSyncthingConfigs);
+
+  getDevicesWithFolder = devices: folder: let
+    hasFolder = device: builtins.elem folder device.folders;
+  in
+    builtins.attrNames (lib.filterAttrs (name: device: hasFolder device) devices);
 
   getHostFolders =
     lib.mapAttrsToList
     (name: value: {
       "${name}" = {
         path = value;
-        devices = getFolderDevices name;
+        devices = getFolderDevices name ++ (getDevicesWithFolder cfg.otherDevices name);
       };
     });
+
+  deviceListFromSystems = lib.mapAttrs (name: config: config.device) allSyncthingConfigs;
+
+  foldersFromHost = host:
+    lib.mkMerge (getHostFolders
+      (getSyncthingConfig target host).paths);
 in {
   options.mountainous.syncthing =
     {
       enable = lib.mkEnableOption "Whether to enable syncthing";
+
+      otherDevices = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule {
+          options = {
+            device = lib.mkOption {
+              type = lib.types.submodule {
+                options.id = lib.mkOption {
+                  type = lib.types.str;
+                  description = "Device ID";
+                };
+              };
+              description = "Syncthing device configuration";
+            };
+            folders = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              description = "List of folder names to sync with the device";
+            };
+          };
+        });
+        default = {};
+        description = "Configuration for other Syncthing devices";
+      };
     }
     // options.services.syncthing;
 
@@ -75,11 +107,11 @@ in {
           "**/cache"
         ];
 
-        folders =
-          lib.mkMerge (getHostFolders
-            (importSyncthingConfig target config.networking.hostName).paths);
+        folders = foldersFromHost config.networking.hostName;
 
-        devices = lib.mapAttrs (name: config: config.device) syncthingConfigs;
+        devices =
+          deviceListFromSystems
+          // deviceListFromOthers;
       };
 
       extraFlags = [

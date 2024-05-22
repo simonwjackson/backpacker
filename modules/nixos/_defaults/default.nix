@@ -10,6 +10,7 @@
 }: let
   inherit (lib) mkDefault;
   inherit (lib.mountainous) enabled disabled;
+  inherit (lib.mountainous.syncthing) otherDevices;
 in {
   programs.icho = {
     enable = true;
@@ -43,7 +44,10 @@ in {
     printing = mkDefault enabled;
     security = mkDefault enabled;
     sound = mkDefault enabled;
-    syncthing = mkDefault enabled;
+    syncthing = {
+      inherit otherDevices;
+      enable = mkDefault true;
+    };
     user = {
       enable = mkDefault true;
       name = mkDefault "simonwjackson";
