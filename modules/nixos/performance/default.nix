@@ -4,12 +4,12 @@
   pkgs,
   ...
 }: let
-  inherit (lib.mountainous) enabled;
+  inherit (lib.backpacker) enabled;
 
-  cfg = config.mountainous.performance;
+  cfg = config.backpacker.performance;
   powertop = lib.getExe pkgs.powertop;
 in {
-  options.mountainous.performance = {
+  options.backpacker.performance = {
     enable = lib.mkEnableOption "Enable performance tuning";
   };
 
@@ -17,7 +17,7 @@ in {
     services = {
       auto-cpufreq = enabled;
       power-profiles-daemon = enabled;
-      thermald.enable = config.mountainous.hardware.cpu.type == "intel";
+      thermald.enable = config.backpacker.hardware.cpu.type == "intel";
       # a shell daemon created to manage processes' IO and CPU priorities, with community-driven set of rule
       ananicy = {
         enable = true;
@@ -33,7 +33,7 @@ in {
 
     programs.ccache = enabled;
 
-    systemd.services.powertop = lib.mkIf config.mountainous.hardware.battery.enable {
+    systemd.services.powertop = lib.mkIf config.backpacker.hardware.battery.enable {
       # description = "Auto-tune Power Management with powertop";
       unitConfig = {RefuseManualStart = true;};
       wantedBy = ["battery.target" "ac.target"];

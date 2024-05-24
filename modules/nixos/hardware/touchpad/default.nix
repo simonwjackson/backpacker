@@ -4,11 +4,11 @@
   pkgs,
   ...
 }: let
-  inherit (lib.mountainous) enabled;
+  inherit (lib.backpacker) enabled;
 
-  cfg = config.mountainous.hardware.touchpad;
+  cfg = config.backpacker.hardware.touchpad;
 in {
-  options.mountainous.hardware.touchpad = {
+  options.backpacker.hardware.touchpad = {
     enable = lib.mkEnableOption "Whether to enable touchpad configs";
   };
 

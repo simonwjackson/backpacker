@@ -7,7 +7,7 @@
   inherit (lib) concatMapStrings concatStringsSep mapAttrsToList isAttrs mkEnableOption mkOption recursiveUpdate mkIf;
   inherit (lib.types) str attrs attrsOf;
 
-  cfg = config.mountainous.tridactyl;
+  cfg = config.backpacker.tridactyl;
 
   # Define a function to handle the conversion of the 'unbind' list.
   handleUnbind = value:
@@ -80,7 +80,7 @@
         recursiveUpdateWithClashDetection [name] acc (modules.${name})
     ) {} (lib.attrNames modules);
 in {
-  options.mountainous.tridactyl = {
+  options.backpacker.tridactyl = {
     enable = mkEnableOption "Tridactyl browser extension";
 
     settings = mkOption {

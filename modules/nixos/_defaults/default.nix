@@ -9,8 +9,8 @@
   ...
 }: let
   inherit (lib) mkDefault;
-  inherit (lib.mountainous) enabled disabled;
-  inherit (lib.mountainous.syncthing) otherDevices;
+  inherit (lib.backpacker) enabled disabled;
+  inherit (lib.backpacker.syncthing) otherDevices;
 in {
   programs.icho = {
     enable = true;
@@ -24,7 +24,7 @@ in {
 
   programs.zsh.enable = true;
 
-  mountainous = {
+  backpacker = {
     agenix = mkDefault enabled;
     boot = mkDefault enabled;
     hardware = {

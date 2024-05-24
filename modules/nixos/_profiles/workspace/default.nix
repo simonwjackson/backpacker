@@ -5,23 +5,23 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkDefault;
-  inherit (lib.mountainous) enabled;
+  inherit (lib.backpacker) enabled;
 
-  cfg = config.mountainous.profiles.workspace;
+  cfg = config.backpacker.profiles.workspace;
 in {
-  options.mountainous.profiles.workspace = {
+  options.backpacker.profiles.workspace = {
     enable = mkEnableOption "Whether to enable workspace configurations";
   };
 
   config = lib.mkIf cfg.enable {
-    mountainous = {
+    backpacker = {
       adb = mkDefault enabled;
     };
 
     services = {
       xserver.enable = true;
       displayManager = {
-        autoLogin.user = config.mountainous.user.name;
+        autoLogin.user = config.backpacker.user.name;
         defaultSession = "home-manager";
       };
 

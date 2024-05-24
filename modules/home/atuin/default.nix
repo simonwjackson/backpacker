@@ -6,9 +6,9 @@
 }: let
   inherit (lib) mkEnableOption mkOption;
 
-  cfg = config.mountainous.atuin;
+  cfg = config.backpacker.atuin;
 in {
-  options.mountainous.atuin = {
+  options.backpacker.atuin = {
     enable = mkEnableOption "Whether to enable atuin";
 
     key_path = mkOption {

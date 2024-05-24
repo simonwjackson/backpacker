@@ -6,13 +6,13 @@
 }: let
   inherit (lib) mkEnableOption;
 
-  cfg = config.mountainous.firefox;
+  cfg = config.backpacker.firefox;
 in {
   imports = [
     ./tridactyl
   ];
 
-  options.mountainous.firefox = {
+  options.backpacker.firefox = {
     enable = mkEnableOption "Whether to enable the firefox browser";
   };
 

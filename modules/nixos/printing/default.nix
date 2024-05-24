@@ -5,9 +5,9 @@
 }: let
   inherit (lib) mkIf mkEnableOption;
 
-  cfg = config.mountainous.printing;
+  cfg = config.backpacker.printing;
 in {
-  options.mountainous.printing = {
+  options.backpacker.printing = {
     enable = mkEnableOption "Whether to enable printing";
   };
 

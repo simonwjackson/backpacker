@@ -7,9 +7,9 @@
 }: let
   inherit (lib) mkEnableOption mkOption;
 
-  cfg = config.mountainous.security;
+  cfg = config.backpacker.security;
 in {
-  options.mountainous.security = {
+  options.backpacker.security = {
     enable = mkEnableOption "Whether to enable security";
   };
 
@@ -21,7 +21,7 @@ in {
         wheelNeedsPassword = false;
         extraRules = [
           {
-            users = ["${config.mountainous.user.name}"];
+            users = ["${config.backpacker.user.name}"];
 
             commands = [
               {
@@ -42,13 +42,13 @@ in {
           value = "unlimited";
         }
         {
-          domain = "${config.mountainous.user.name}";
+          domain = "${config.backpacker.user.name}";
           type = "soft";
           item = "memlock";
           value = "unlimited";
         }
         {
-          domain = "${config.mountainous.user.name}";
+          domain = "${config.backpacker.user.name}";
           type = "hard";
           item = "memlock";
           value = "unlimited";

@@ -7,9 +7,9 @@
 }: let
   inherit (lib) mkEnableOption;
 
-  cfg = config.mountainous.lf;
+  cfg = config.backpacker.lf;
 in {
-  options.mountainous.lf = {
+  options.backpacker.lf = {
     enable = mkEnableOption "Whether to enable lf";
   };
 

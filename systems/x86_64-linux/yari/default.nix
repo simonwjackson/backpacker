@@ -26,7 +26,7 @@
 
   zramSwap.enable = true;
 
-  mountainous = {
+  backpacker = {
     boot.type = "bios";
     printing.enable = false;
     hardware.cpu.type = "intel";

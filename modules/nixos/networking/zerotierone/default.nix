@@ -10,9 +10,9 @@
   config,
   ...
 }: let
-  cfg = config.mountainous.networking.zerotierone;
+  cfg = config.backpacker.networking.zerotierone;
 in {
-  options.mountainous.networking.zerotierone = {
+  options.backpacker.networking.zerotierone = {
     enable = lib.mkEnableOption "Toggle zerotierone daemon";
   };
 

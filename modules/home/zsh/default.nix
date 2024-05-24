@@ -7,13 +7,13 @@
 }: let
   inherit (lib) mkEnableOption;
 
-  cfg = config.mountainous.zsh;
+  cfg = config.backpacker.zsh;
 in {
   imports = [
     ./p10k
   ];
 
-  options.mountainous.zsh = {
+  options.backpacker.zsh = {
     enable = mkEnableOption "Whether to enable zsh";
   };
 

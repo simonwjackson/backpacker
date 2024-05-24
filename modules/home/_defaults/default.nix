@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  inherit (lib.mountainous) enabled disabled;
+  inherit (lib.backpacker) enabled disabled;
   inherit (lib) mkDefault;
 in {
   imports = [
@@ -13,7 +13,7 @@ in {
   ];
 
   config = {
-    mountainous = {
+    backpacker = {
       agenix = mkDefault enabled;
       atuin = {
         enable = true;
@@ -42,7 +42,7 @@ in {
         privateKeyFile = config.age.secrets."user-simonwjackson-taskserver-private.key".path;
         caCertFile = config.age.secrets."user-simonwjackson-taskserver-ca.cert".path;
         server = "yari:53589";
-        credentials = "mountainous/simonwjackson/430e9d17-bc5e-4534-9c37-c1dcab337dbe";
+        credentials = "backpacker/simonwjackson/430e9d17-bc5e-4534-9c37-c1dcab337dbe";
       };
       tridactyl = mkDefault enabled;
       work-mode = mkDefault disabled;

@@ -16,7 +16,7 @@
   config,
   ...
 }: {
-  mountainous.firefox.enable = true;
+  backpacker.firefox.enable = true;
   services.mpvd.enable = true;
 
   home = {

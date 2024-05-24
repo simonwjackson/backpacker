@@ -6,9 +6,9 @@
 }: let
   inherit (lib.types) str;
 
-  cfg = config.mountainous.tank;
+  cfg = config.backpacker.tank;
 in {
-  options.mountainous.tank = {
+  options.backpacker.tank = {
     enable = lib.mkEnableOption "Whether to enable a centralized location for your data";
 
     path = lib.mkOption {

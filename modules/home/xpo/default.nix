@@ -4,10 +4,10 @@
   lib,
   ...
 }: let
-  cfg = config.mountainous.xpo;
-  package = pkgs.mountainous.xpo;
+  cfg = config.backpacker.xpo;
+  package = pkgs.backpacker.xpo;
 in {
-  options.mountainous.xpo = {
+  options.backpacker.xpo = {
     enable = lib.mkEnableOption "xpo";
 
     defaultServer = lib.mkOption {

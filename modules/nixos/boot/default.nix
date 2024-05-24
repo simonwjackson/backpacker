@@ -4,9 +4,9 @@
   pkgs,
   ...
 }: let
-  cfg = config.mountainous.boot;
+  cfg = config.backpacker.boot;
 in {
-  options.mountainous.boot = {
+  options.backpacker.boot = {
     enable = lib.mkEnableOption "Whether to enable common boot options";
 
     type = lib.mkOption {

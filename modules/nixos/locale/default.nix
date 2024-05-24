@@ -7,9 +7,9 @@
 }: let
   inherit (lib) mkEnableOption mkOption;
 
-  cfg = config.mountainous.locale;
+  cfg = config.backpacker.locale;
 in {
-  options.mountainous.locale = {
+  options.backpacker.locale = {
     enable = mkEnableOption "Whether to enable locale";
   };
 

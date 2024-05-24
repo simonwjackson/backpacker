@@ -7,9 +7,9 @@
   inherit (lib) mkEnableOption mkOption;
   inherit (lib.types) str;
 
-  cfg = config.mountainous.taskwarrior-sync;
+  cfg = config.backpacker.taskwarrior-sync;
 in {
-  options.mountainous.taskwarrior-sync = {
+  options.backpacker.taskwarrior-sync = {
     enable = mkEnableOption "Whether to enable the taskwarrior sync service";
 
     privateKeyFile = mkOption {

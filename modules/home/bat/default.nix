@@ -7,9 +7,9 @@
 }: let
   inherit (lib) mkEnableOption;
 
-  cfg = config.mountainous.bat;
+  cfg = config.backpacker.bat;
 in {
-  options.mountainous.bat = {
+  options.backpacker.bat = {
     enable = mkEnableOption "Whether to enable bat";
   };
 

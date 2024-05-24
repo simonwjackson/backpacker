@@ -6,13 +6,13 @@
   inputs,
   ...
 }: let
-  inherit (lib.mountainous) enabled;
+  inherit (lib.backpacker) enabled;
 in {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  mountainous = {
+  backpacker = {
     desktop.plasma = enabled;
     gaming = {
       core = enabled;

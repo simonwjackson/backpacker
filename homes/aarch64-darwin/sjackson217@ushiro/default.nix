@@ -23,7 +23,7 @@ in {
     secretsMountPoint = "${config.home.homeDirectory}/.agenix/agenix.d";
   };
 
-  # mountainous.firefox.enable = true;
+  # backpacker.firefox.enable = true;
   programs.firefox = {
     enable = true;
     package = pkgs.firefox-bin;

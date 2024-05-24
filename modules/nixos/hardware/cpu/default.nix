@@ -8,9 +8,9 @@
 }: let
   inherit (lib) types mkEnableOption mkOption;
 
-  cfg = config.mountainous.hardware.cpu;
+  cfg = config.backpacker.hardware.cpu;
 in {
-  options.mountainous.hardware.cpu = {
+  options.backpacker.hardware.cpu = {
     enable = mkEnableOption "Whether to enable cpu configurations";
 
     type = mkOption {

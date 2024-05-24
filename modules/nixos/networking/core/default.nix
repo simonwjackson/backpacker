@@ -3,9 +3,9 @@
   lib,
   ...
 }: let
-  inherit (lib.mountainous) enabled;
+  inherit (lib.backpacker) enabled;
 
-  cfg = config.mountainous.networking.core;
+  cfg = config.backpacker.networking.core;
 
   generateUdevRules = interfaces: let
     generateRule = {
@@ -17,8 +17,8 @@
     + (builtins.concatStringsSep "\n" (map generateRule interfaces))
     + "\n";
 in {
-  options.mountainous.networking.core = {
-    enable = lib.mkEnableOption "Enable Mountainous networking core configuration";
+  options.backpacker.networking.core = {
+    enable = lib.mkEnableOption "Enable backpacker networking core configuration";
 
     names = lib.mkOption {
       type = lib.types.listOf (lib.types.submodule {

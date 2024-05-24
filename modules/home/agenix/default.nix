@@ -16,11 +16,11 @@
   secretsDir = ../../../secrets;
   secretsFile = "${secretsDir}/secrets.nix";
 
-  cfg = config.mountainous.agenix;
+  cfg = config.backpacker.agenix;
 in {
   # imports = [ragenix.nixosModules.default];
 
-  options.mountainous.agenix = {
+  options.backpacker.agenix = {
     enable = mkEnableOption "Whether to enable agenix";
   };
 

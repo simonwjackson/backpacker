@@ -111,10 +111,10 @@
       };
 
       snowfall = {
-        namespace = "mountainous";
+        namespace = "backpacker";
 
         meta = {
-          name = "mountainous";
+          name = "backpacker";
           title = "My System Configs";
         };
       };

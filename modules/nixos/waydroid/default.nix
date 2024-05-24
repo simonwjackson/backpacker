@@ -6,11 +6,11 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkOption;
-  inherit (lib.mountainous) enabled;
+  inherit (lib.backpacker) enabled;
 
-  cfg = config.mountainous.waydriod;
+  cfg = config.backpacker.waydriod;
 in {
-  options.mountainous.waydriod = {
+  options.backpacker.waydriod = {
     enable = mkEnableOption "Whether to enable waydriod";
   };
 

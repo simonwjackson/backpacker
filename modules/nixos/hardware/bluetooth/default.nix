@@ -5,9 +5,9 @@
 }: let
   inherit (lib) mkIf mkEnableOption;
 
-  cfg = config.mountainous.hardware.bluetooth;
+  cfg = config.backpacker.hardware.bluetooth;
 in {
-  options.mountainous.hardware.bluetooth = {
+  options.backpacker.hardware.bluetooth = {
     enable = mkEnableOption "Whether to enable bluetooth";
   };
 

@@ -4,9 +4,9 @@
   pkgs,
   ...
 }: let
-  cfg = config.mountainous.vpn-proxy;
+  cfg = config.backpacker.vpn-proxy;
 in {
-  options.mountainous.vpn-proxy = {
+  options.backpacker.vpn-proxy = {
     enable = lib.mkEnableOption "VPN Proxy";
 
     host = lib.mkOption {

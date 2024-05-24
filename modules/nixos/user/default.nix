@@ -8,10 +8,10 @@
   inherit (lib) mkEnableOption mkOption;
   inherit (lib.types) str listOf path attrs;
 
-  cfg = config.mountainous.user;
+  cfg = config.backpacker.user;
   ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in {
-  options.mountainous.user = {
+  options.backpacker.user = {
     enable = mkEnableOption "Whether to enable the main user account.";
 
     home = lib.mkOption {

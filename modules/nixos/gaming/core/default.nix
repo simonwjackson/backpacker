@@ -6,10 +6,10 @@
   system,
   ...
 }: let
-  cfg = config.mountainous.gaming.core;
+  cfg = config.backpacker.gaming.core;
   flatpak = lib.getExe pkgs.flatpak;
 in {
-  options.mountainous.gaming.core = {
+  options.backpacker.gaming.core = {
     enable = lib.mkEnableOption "Enable gaming";
     isHost = lib.mkEnableOption "Whether or not device will be used for game streaming";
   };
@@ -44,7 +44,7 @@ in {
       };
     };
 
-    mountainous.gaming.sunshine.enable = cfg.isHost;
+    backpacker.gaming.sunshine.enable = cfg.isHost;
     systemd.user.services.startSteam = lib.mkIf (cfg.isHost) {
       path = [pkgs.flatpak];
       description = "Start Steam Flatpak app";

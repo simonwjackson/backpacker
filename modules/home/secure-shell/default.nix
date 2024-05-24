@@ -7,9 +7,9 @@
 }: let
   inherit (lib) mkEnableOption;
 
-  cfg = config.mountainous.secure-shell;
+  cfg = config.backpacker.secure-shell;
 in {
-  options.mountainous.secure-shell = {
+  options.backpacker.secure-shell = {
     enable = mkEnableOption "Whether to enable ssh user configs";
   };
 

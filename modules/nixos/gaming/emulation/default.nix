@@ -8,12 +8,12 @@
 }: let
   inherit (lib) mkEnableOption mkOption;
 
-  cfg = config.mountainous.gaming.emulation;
+  cfg = config.backpacker.gaming.emulation;
   snowscape = "/glacier/snowscape";
-  saves = "${snowscape}/gaming/profiles/${config.mountainous.user.name}/progress/saves";
-  share = "/home/${config.mountainous.user.name}/.local/share";
+  saves = "${snowscape}/gaming/profiles/${config.backpacker.user.name}/progress/saves";
+  share = "/home/${config.backpacker.user.name}/.local/share";
 in {
-  options.mountainous.gaming.emulation = {
+  options.backpacker.gaming.emulation = {
     enable = mkEnableOption "Whether to enable emulation";
     gen-8 = mkEnableOption "Whether to enable the 8th generation of consoles";
     gen-7 = mkEnableOption "Whether to enable the 7th generation of consoles";

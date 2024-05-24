@@ -6,14 +6,14 @@
   system,
   ...
 }: let
-  cfg = config.mountainous.gaming.steam;
+  cfg = config.backpacker.gaming.steam;
   snowscape = "/glacier/snowscape";
   steamApps = "${snowscape}/gaming/games/steam/steamapps";
   steamAppsOverlay = "/home/simonwjackson/.var/app/com.valvesoftware.Steam/data/Steam/steamapps";
   mountpoint = "${pkgs.util-linux}/bin/mountpoint";
   mount = "${pkgs.mount}/bin/mount";
 in {
-  options.mountainous.gaming.steam = {
+  options.backpacker.gaming.steam = {
     enable = lib.mkEnableOption "Enable steam";
   };
 
@@ -41,8 +41,8 @@ in {
     systemd.services.mountSteamAppsOverlay = {
       # after = ["mountSnowscape.service"];
       script = ''
-        install -d -o ${config.mountainous.user.name} -g users -m 770 ${steamApps}
-        install -d -o ${config.mountainous.user.name} -g users -m 770 /home/${config.mountainous.user.name}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps
+        install -d -o ${config.backpacker.user.name} -g users -m 770 ${steamApps}
+        install -d -o ${config.backpacker.user.name} -g users -m 770 /home/${config.backpacker.user.name}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps
         ${mountpoint} -q ${steamAppsOverlay} || ${mount} --bind ${steamApps} ${steamAppsOverlay}
       '';
       wantedBy = ["multi-user.target"];

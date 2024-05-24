@@ -4,9 +4,9 @@
   pkgs,
   ...
 }: let
-  cfg = config.mountainous.hardware.battery;
+  cfg = config.backpacker.hardware.battery;
 in {
-  options.mountainous.hardware.battery = {
+  options.backpacker.hardware.battery = {
     enable = lib.mkEnableOption "Enable battery systemd targets";
   };
 

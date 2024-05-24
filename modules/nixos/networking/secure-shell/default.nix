@@ -10,9 +10,9 @@
   inherit (lib) mkOption mkEnableOption mkIf optionalAttrs;
   inherit (lib.types) bool;
 
-  cfg = config.mountainous.networking.secure-shell;
+  cfg = config.backpacker.networking.secure-shell;
 in {
-  options.mountainous.networking.secure-shell = {
+  options.backpacker.networking.secure-shell = {
     enable = mkEnableOption "Whether to enable ssh and mosh";
 
     harden = mkOption {
@@ -37,7 +37,7 @@ in {
 
     programs.ssh = {
       knownHosts =
-        lib.mountainous.knownHostsBuilder {
+        lib.backpacker.knownHostsBuilder {
           domains = [
             "hummingbird-lake.ts.net"
             "mountaino.us"

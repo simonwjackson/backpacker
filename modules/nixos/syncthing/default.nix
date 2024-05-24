@@ -6,11 +6,11 @@
   target,
   ...
 }: let
-  inherit (lib.mountainous) enabled;
-  inherit (lib.mountainous.util) allArchitectures getAllHosts;
+  inherit (lib.backpacker) enabled;
+  inherit (lib.backpacker.util) allArchitectures getAllHosts;
   inherit (lib.snowfall.fs) get-file;
 
-  cfg = config.mountainous.syncthing;
+  cfg = config.backpacker.syncthing;
 
   deviceListFromOthers = lib.mapAttrs (name: value: {id = value.device.id;}) cfg.otherDevices;
 
@@ -62,7 +62,7 @@
     lib.mkMerge (getHostFolders
       (getSyncthingConfig target host).paths);
 in {
-  options.mountainous.syncthing =
+  options.backpacker.syncthing =
     {
       enable = lib.mkEnableOption "Whether to enable syncthing";
 
@@ -97,8 +97,8 @@ in {
       overrideFolders = true;
       key = cfg.key;
       cert = cfg.cert;
-      user = config.mountainous.user.name;
-      configDir = "/home/${config.mountainous.user.name}/.config/syncthing";
+      user = config.backpacker.user.name;
+      configDir = "/home/${config.backpacker.user.name}/.config/syncthing";
 
       settings = {
         ignores.line = [

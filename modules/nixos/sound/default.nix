@@ -6,9 +6,9 @@
 }: let
   inherit (lib) mkEnableOption mkIf;
 
-  cfg = config.mountainous.sound;
+  cfg = config.backpacker.sound;
 in {
-  options.mountainous.sound = {
+  options.backpacker.sound = {
     enable = mkEnableOption "Whether to enable the zerotierone daemon";
   };
 

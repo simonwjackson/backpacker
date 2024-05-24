@@ -6,12 +6,12 @@
   pkgs,
   ...
 }: let
-  cfg = config.mountainous.work-mode;
+  cfg = config.backpacker.work-mode;
   package = pkgs.work-mode;
-  popup-term = "${pkgs.mountainous.popup-term}/bin/popup-term";
+  popup-term = "${pkgs.backpacker.popup-term}/bin/popup-term";
   tmesh = lib.getExe inputs.tmesh.packages.${system}.default;
 in {
-  options.mountainous.work-mode = {
+  options.backpacker.work-mode = {
     enable = lib.mkEnableOption "work-mode";
 
     monitor = lib.mkOption {
@@ -786,7 +786,7 @@ in {
           + "/bin/bsp-layout";
       in {
         "super + space" = ''
-          ${popup-term} ${pkgs.mountainous.wifi-select}/bin/wifi-select
+          ${popup-term} ${pkgs.backpacker.wifi-select}/bin/wifi-select
         '';
         "super + m" = ''
           ${bsp-layout} next --layouts rtall,monocle
@@ -978,7 +978,7 @@ in {
           interval = "3.0";
           interface.type = "wireless";
 
-          format-connected = "%{A1:${popup-term} ${pkgs.mountainous.wifi-select}/bin/wifi-select:}<ramp-signal> <label-connected>%{A}";
+          format-connected = "%{A1:${popup-term} ${pkgs.backpacker.wifi-select}/bin/wifi-select:}<ramp-signal> <label-connected>%{A}";
           label-connected = "%essid%";
 
           ramp = {
@@ -1025,7 +1025,7 @@ in {
         # };
 
         "module/cpu-profile" = let
-          cpu-profile = "${pkgs.mountainous.cpu-profile}/bin/cpu-profile";
+          cpu-profile = "${pkgs.backpacker.cpu-profile}/bin/cpu-profile";
         in {
           type = "custom/script";
           exec =

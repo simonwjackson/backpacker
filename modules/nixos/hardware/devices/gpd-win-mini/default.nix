@@ -6,14 +6,14 @@
 }: let
   inherit (lib) mkIf mkEnableOption;
 
-  cfg = config.mountainous.hardware.devices.gpd-win-mini;
+  cfg = config.backpacker.hardware.devices.gpd-win-mini;
 in {
-  options.mountainous.hardware.devices.gpd-win-mini = {
+  options.backpacker.hardware.devices.gpd-win-mini = {
     enable = mkEnableOption "Whether to enable GPD Win Mini adjustments";
   };
 
   config = mkIf cfg.enable {
-    mountainous = {
+    backpacker = {
       hardware = {
         bluetooth.enable = true;
         battery.enable = true;

@@ -7,9 +7,9 @@
 }: let
   inherit (lib) mkEnableOption;
 
-  cfg = config.mountainous.eza;
+  cfg = config.backpacker.eza;
 in {
-  options.mountainous.eza = {
+  options.backpacker.eza = {
     enable = mkEnableOption "Whether to enable eza";
   };
 

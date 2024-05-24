@@ -4,16 +4,16 @@
   pkgs,
   ...
 }: let
-  inherit (lib.mountainous) enabled;
+  inherit (lib.backpacker) enabled;
 
-  cfg = config.mountainous.profiles.laptop;
+  cfg = config.backpacker.profiles.laptop;
 in {
-  options.mountainous.profiles.laptop = {
+  options.backpacker.profiles.laptop = {
     enable = lib.mkEnableOption "Whether to enable laptop configurations";
   };
 
   config = lib.mkIf cfg.enable {
-    mountainous = {
+    backpacker = {
       hardware = {
         touchpad = enabled;
         battery = enabled;

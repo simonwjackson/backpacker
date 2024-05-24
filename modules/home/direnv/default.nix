@@ -7,9 +7,9 @@
 }: let
   inherit (lib) mkEnableOption;
 
-  cfg = config.mountainous.direnv;
+  cfg = config.backpacker.direnv;
 in {
-  options.mountainous.direnv = {
+  options.backpacker.direnv = {
     enable = mkEnableOption "Whether to enable direnv";
   };
 

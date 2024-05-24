@@ -10,11 +10,11 @@
   config,
   ...
 }: let
-  inherit (lib.mountainous) enabled;
+  inherit (lib.backpacker) enabled;
 
-  cfg = config.mountainous.desktop.plasma;
+  cfg = config.backpacker.desktop.plasma;
 in {
-  options.mountainous.desktop.plasma = {
+  options.backpacker.desktop.plasma = {
     enable = lib.mkEnableOption "Whether to enable the plasma desktop";
   };
 
@@ -36,7 +36,7 @@ in {
         defaultSession = "plasmawayland";
         autoLogin = {
           enable = true;
-          user = config.mountainous.user.name;
+          user = config.backpacker.user.name;
         };
       };
     };

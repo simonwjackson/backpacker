@@ -7,13 +7,13 @@
   pkgs,
   ...
 }: let
-  inherit (lib.mountainous) enabled;
+  inherit (lib.backpacker) enabled;
 in {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  mountainous = {
+  backpacker = {
     hardware.devices.samsung-galaxy-book3-360 = enabled;
     boot = enabled;
     performance = enabled;

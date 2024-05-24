@@ -6,7 +6,7 @@
 }: let
   inherit (lib) mkIf mkEnableOption;
 
-  cfg = config.mountainous.gaming.sunshine;
+  cfg = config.backpacker.gaming.sunshine;
 
   # HACK: this iz device (zao) specific
   ports = [
@@ -28,7 +28,7 @@
     "HDMI-1"
   ];
 in {
-  options.mountainous.gaming.sunshine = {
+  options.backpacker.gaming.sunshine = {
     enable = mkEnableOption "Whether to enable Sunshine";
   };
 

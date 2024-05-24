@@ -4,10 +4,10 @@
   pkgs,
   ...
 }: let
-  cfg = config.mountainous.mpvd;
+  cfg = config.backpacker.mpvd;
   mpv = lib.getExe pkgs.mpv;
 in {
-  options.mountainous.mpvd = {
+  options.backpacker.mpvd = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;

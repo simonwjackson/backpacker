@@ -4,9 +4,9 @@
   pkgs,
   ...
 }: let
-  cfg = config.mountainous.hardware.hybrid-sleep;
+  cfg = config.backpacker.hardware.hybrid-sleep;
 in {
-  options.mountainous.hardware.hybrid-sleep = {
+  options.backpacker.hardware.hybrid-sleep = {
     enable = lib.mkEnableOption "Whether to enable hybrid sleep";
 
     delay = lib.mkOption {

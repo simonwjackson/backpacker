@@ -16,11 +16,11 @@
   secretsDir = ../../../secrets;
   secretsFile = "${secretsDir}/secrets.nix";
 
-  cfg = config.mountainous.agenix;
+  cfg = config.backpacker.agenix;
 in {
   # imports = [ragenix.nixosModules.default];
 
-  options.mountainous.agenix = {
+  options.backpacker.agenix = {
     enable = mkEnableOption "Whether to enable agenix";
   };
 
@@ -41,7 +41,7 @@ in {
             nameValuePair (removeSuffix ".age" n) {
               file = "${secretsDir}/${n}";
               group = "users";
-              owner = mkDefault config.mountainous.user.name;
+              owner = mkDefault config.backpacker.user.name;
             }) (import secretsFile)
         else {};
     };

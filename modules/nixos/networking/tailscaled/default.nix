@@ -10,7 +10,7 @@
   config,
   ...
 }: let
-  cfg = config.mountainous.networking.tailscaled;
+  cfg = config.backpacker.networking.tailscaled;
   args =
     cfg.extraArgs
     + " "
@@ -21,7 +21,7 @@
       else "false"
     );
 in {
-  options.mountainous.networking.tailscaled = {
+  options.backpacker.networking.tailscaled = {
     enable = lib.mkEnableOption "Tailscale Daemon";
 
     isMobileNixos = lib.mkOption {

@@ -7,9 +7,9 @@
 }: let
   inherit (lib) mkEnableOption mkOption;
 
-  cfg = config.mountainous.git;
+  cfg = config.backpacker.git;
 in {
-  options.mountainous.git = {
+  options.backpacker.git = {
     enable = mkEnableOption "Whether to enable git";
 
     github-token = mkOption {

@@ -18,8 +18,8 @@
     enable = true;
   };
 
-  mountainous.networking.zerotierone.enable = false;
-  mountainous.networking.tailscaled.isMobileNixos = true;
+  backpacker.networking.zerotierone.enable = false;
+  backpacker.networking.tailscaled.isMobileNixos = true;
 
   programs.mosh.enable = true;
   services.openssh = {

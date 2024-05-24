@@ -7,9 +7,9 @@
 }: let
   inherit (lib) mkEnableOption;
 
-  cfg = config.mountainous.kitty;
+  cfg = config.backpacker.kitty;
 in {
-  options.mountainous.kitty = {
+  options.backpacker.kitty = {
     enable = mkEnableOption "Whether to enable kitty";
     shellIntegration = {
       enableBashIntegration = true;
