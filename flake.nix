@@ -48,9 +48,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # INFO: https://github.com/snowfallorg/lib/issues/54#issuecomment-2067533982
-    nixpkgs-mobile-nixos.url = "github:nixos/nixpkgs/0c56c244409eb4424611f37953bfd03c2534bcce";
-
     mobile-nixos = {
       url = "github:NixOS/mobile-nixos";
       flake = false;
@@ -87,10 +84,6 @@
       homes.modules = with inputs; [
         # tmesh.nixosModules.default
       ];
-
-      systems.hosts.naka = {
-        channelName = "nixpkgs-mobile-nixos";
-      };
 
       overlays = with inputs; [
         snowfall-frost.overlays.default

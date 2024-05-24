@@ -1010,22 +1010,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-mobile-nixos": {
-      "locked": {
-        "lastModified": 1714884535,
-        "narHash": "sha256-UTTEYRHWKJIVxDhpKbMR7pIrLdmsTqEQGb10B4SuwOA=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "0c56c244409eb4424611f37953bfd03c2534bcce",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "0c56c244409eb4424611f37953bfd03c2534bcce",
-        "type": "github"
-      }
-    },
     "nixpkgs_10": {
       "locked": {
         "lastModified": 1716137900,
@@ -1292,7 +1276,6 @@
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_6",
         "nixpkgs-firefox-darwin": "nixpkgs-firefox-darwin",
-        "nixpkgs-mobile-nixos": "nixpkgs-mobile-nixos",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "snowfall-frost": "snowfall-frost_2",
         "snowfall-lib": "snowfall-lib_4",
