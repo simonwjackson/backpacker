@@ -15,7 +15,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     backpacker = {
-      adb = mkDefault enabled;
+      # adb = mkDefault enabled;
     };
 
     services = {
