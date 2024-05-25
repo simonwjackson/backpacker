@@ -91,7 +91,6 @@
 
       channels-config = {
         allowUnfree = true;
-        # allowUnsupportedSystem = true;
 
         permittedInsecurePackages = [
         ];

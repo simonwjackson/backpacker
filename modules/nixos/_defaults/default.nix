@@ -25,6 +25,7 @@ in {
   programs.zsh.enable = true;
 
   backpacker = {
+    adb = mkDefault disabled;
     agenix = mkDefault enabled;
     boot = mkDefault enabled;
     hardware = {
