@@ -12,9 +12,7 @@
   inherit (lib.modules) mkDefault;
   inherit (lib.strings) removeSuffix;
 
-  # secretsDir = "${config.snowflake.hostDir}/secrets";
-  secretsDir = ../../../secrets;
-  secretsFile = "${secretsDir}/secrets.nix";
+  secretsFile = "${cfg.secretsDir}/secrets.nix";
 
   cfg = config.backpacker.agenix;
 in {
@@ -22,6 +20,15 @@ in {
 
   options.backpacker.agenix = {
     enable = mkEnableOption "Whether to enable agenix";
+    secretsDir = mkOption {
+      type = lib.types.path;
+      description = "";
+    };
+    user = mkOption {
+      type = lib.types.str;
+      default = config.backpacker.user.name;
+      description = "";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -39,9 +46,9 @@ in {
         then
           mapAttrs' (n: _:
             nameValuePair (removeSuffix ".age" n) {
-              file = "${secretsDir}/${n}";
+              file = "${cfg.secretsDir}/${n}";
               group = "users";
-              owner = mkDefault config.backpacker.user.name;
+              owner = mkDefault cfg.user;
             }) (import secretsFile)
         else {};
     };

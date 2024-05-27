@@ -8,7 +8,8 @@
 }: let
   inherit (config.networking) hostName;
   inherit (lib) mkOption mkEnableOption mkIf optionalAttrs;
-  inherit (lib.types) bool;
+  inherit (lib.types) listOf bool str path;
+  inherit (lib.backpacker) knownHostsBuilder;
 
   cfg = config.backpacker.networking.secure-shell;
 in {
@@ -19,6 +20,17 @@ in {
       type = bool;
       default = true;
       description = "Whether to enable hardening options for SSH";
+    };
+
+    systemsDir = mkOption {
+      type = path;
+      description = "";
+    };
+
+    domains = mkOption {
+      type = listOf str;
+      default = [];
+      description = "";
     };
   };
 
@@ -37,12 +49,9 @@ in {
 
     programs.ssh = {
       knownHosts =
-        lib.backpacker.knownHostsBuilder {
-          domains = [
-            "hummingbird-lake.ts.net"
-            "mountaino.us"
-          ];
-
+        knownHostsBuilder {
+          systemsDir = cfg.systemsDir;
+          domains = cfg.domains;
           localhost = hostName;
         }
         // {

@@ -66,19 +66,19 @@
 
       # Add modules to all NixOS systems.
       systems.modules.nixos = with inputs; [
-        agenix.nixosModules.default
-        disko.nixosModules.default
+        # agenix.nixosModules.default
+        # disko.nixosModules.default
         home-manager.nixosModules.default
-        kmonad.nixosModules.default
-        icho.nixosModules.default
-        nix-flatpak.nixosModules.nix-flatpak
-        tmesh.nixosModules.default
+        # kmonad.nixosModules.default
+        # icho.nixosModules.default
+        # nix-flatpak.nixosModules.nix-flatpak
+        # tmesh.nixosModules.default
       ];
 
       systems.modules.darwin = with inputs; [
         home-manager.darwinModules.default
-        icho.nixosModules.default
-        tmesh.nixosModules.default
+        # icho.nixosModules.default
+        # tmesh.nixosModules.default
       ];
 
       homes.modules = with inputs; [
