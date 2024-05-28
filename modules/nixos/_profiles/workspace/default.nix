@@ -11,6 +11,11 @@
 in {
   options.backpacker.profiles.workspace = {
     enable = mkEnableOption "Whether to enable workspace configurations";
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = config.backpacker.user.name;
+      description = "";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -21,7 +26,7 @@ in {
     services = {
       xserver.enable = true;
       displayManager = {
-        autoLogin.user = config.backpacker.user.name;
+        autoLogin.user = cfg.user;
         defaultSession = "home-manager";
       };
 
