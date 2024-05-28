@@ -11,6 +11,11 @@
 in {
   options.backpacker.security = {
     enable = mkEnableOption "Whether to enable security";
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = config.backpacker.user.name;
+      description = "";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -21,7 +26,7 @@ in {
         wheelNeedsPassword = false;
         extraRules = [
           {
-            users = ["${config.backpacker.user.name}"];
+            users = ["${cfg.user}"];
 
             commands = [
               {
@@ -42,13 +47,13 @@ in {
           value = "unlimited";
         }
         {
-          domain = "${config.backpacker.user.name}";
+          domain = "${cfg.user}";
           type = "soft";
           item = "memlock";
           value = "unlimited";
         }
         {
-          domain = "${config.backpacker.user.name}";
+          domain = "${cfg.user}";
           type = "hard";
           item = "memlock";
           value = "unlimited";
