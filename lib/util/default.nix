@@ -2,7 +2,7 @@
   inherit (lib.snowfall.fs) get-file;
 in rec {
   util = rec {
-    allArchitectures = builtins.attrNames (builtins.readDir (get-file "systems"));
-    getAllHosts = arch: builtins.attrNames (builtins.readDir (get-file "systems/${arch}"));
+    allArchitectures = systems: builtins.attrNames (builtins.readDir systems);
+    getAllHosts = systems: arch: builtins.attrNames (builtins.readDir "${systems}/${arch}");
   };
 }

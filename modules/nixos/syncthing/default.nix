@@ -15,7 +15,7 @@
   deviceListFromOthers = lib.mapAttrs (name: value: {id = value.device.id;}) cfg.otherDevices;
 
   getSyncthingConfig = arch: host: let
-    syncthingPath = get-file "systems/${arch}/${host}/syncthing.nix";
+    syncthingPath = "${cfg.systemsDir}/${arch}/${host}/syncthing.nix";
   in
     if builtins.pathExists syncthingPath
     then import syncthingPath {inherit config host;}
@@ -33,9 +33,9 @@
               value = config;
             }
             else null
-        ) (getAllHosts arch))
+        ) (getAllHosts cfg.systemsDir arch))
     )
-    allArchitectures);
+    (allArchitectures cfg.systemsDir));
 
   getFolderDevices = name:
     lib.flatten (lib.mapAttrsToList
@@ -87,6 +87,23 @@ in {
         default = {};
         description = "Configuration for other Syncthing devices";
       };
+
+      systemsDir = lib.mkOption {
+        type = lib.types.path;
+        description = "";
+      };
+
+      user = lib.mkOption {
+        type = lib.types.str;
+        default = config.backpacker.user.name;
+        description = "";
+      };
+
+      hostName = lib.mkOption {
+        type = lib.types.str;
+        default = config.networking.hostName;
+        description = "";
+      };
     }
     // options.services.syncthing;
 
@@ -97,8 +114,9 @@ in {
       overrideFolders = true;
       key = cfg.key;
       cert = cfg.cert;
-      user = config.backpacker.user.name;
-      configDir = "/home/${config.backpacker.user.name}/.config/syncthing";
+      user = cfg.user;
+      # BUG: Pass in full dir
+      configDir = "/home/${cfg.user}/.config/syncthing";
 
       settings = {
         ignores.line = [
@@ -107,7 +125,7 @@ in {
           "**/cache"
         ];
 
-        folders = foldersFromHost config.networking.hostName;
+        folders = foldersFromHost cfg.hostName;
 
         devices =
           deviceListFromSystems

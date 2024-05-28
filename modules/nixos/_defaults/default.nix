@@ -10,7 +10,6 @@
 }: let
   inherit (lib) mkDefault;
   inherit (lib.backpacker) enabled disabled;
-  inherit (lib.backpacker.syncthing) otherDevices;
 in {
   programs.icho = {
     enable = true;
@@ -45,10 +44,7 @@ in {
     printing = mkDefault enabled;
     security = mkDefault enabled;
     sound = mkDefault enabled;
-    syncthing = {
-      inherit otherDevices;
-      enable = mkDefault true;
-    };
+    syncthing = mkDefault disabled;
     user = {
       enable = mkDefault true;
       name = mkDefault "simonwjackson";
