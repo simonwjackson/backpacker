@@ -38,7 +38,7 @@ in {
         options.age.identityPaths.default
         ++ [
           # TODO: Pull this value from somewhere else in the config
-          "/home/simonwjackson/.ssh/agenix"
+          "/home/${cfg.user}/.ssh/agenix"
         ];
 
       secrets =

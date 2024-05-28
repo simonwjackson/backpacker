@@ -6,22 +6,22 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkOption;
-  # inherit (inputs) ragenix;
   inherit (builtins) filter pathExists;
   inherit (lib.attrsets) mapAttrs' nameValuePair;
   inherit (lib.modules) mkDefault;
   inherit (lib.strings) removeSuffix;
 
-  # secretsDir = "${config.snowflake.hostDir}/secrets";
-  secretsDir = ../../../secrets;
-  secretsFile = "${secretsDir}/secrets.nix";
+  secretsFile = "${cfg.secretsDir}/secrets.nix";
 
   cfg = config.backpacker.agenix;
 in {
-  # imports = [ragenix.nixosModules.default];
-
   options.backpacker.agenix = {
     enable = mkEnableOption "Whether to enable agenix";
+
+    secretsDir = mkOption {
+      type = lib.types.path;
+      description = "";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -38,7 +38,7 @@ in {
         then
           mapAttrs' (n: _:
             nameValuePair (removeSuffix ".age" n) {
-              file = "${secretsDir}/${n}";
+              file = "${cfg.secretsDir}/${n}";
             }) (import secretsFile)
         else {};
     };
