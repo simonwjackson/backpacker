@@ -2,22 +2,23 @@
     <img src="./.github/assets/backpacker-logo.jpg" width="300px"/>
 </h3>
 <h1 align="center">
-    backpacker | <a href="https://nixos.org">NixOS</a> flake built with <a href="https://github.com/snowfallorg/lib">Snowfall</a> 🏔️
+    backpacker | <a href="https://nixos.org">Nix</a> configs
 </h1>
 
 <div align="center">
-  <a href="https://github.com/simonwjackson/neovim-nix-config">
-      <img alt="Static Badge" src="https://img.shields.io/badge/Made_with-Neovim-57A143?style=for-the-badge&logo=neovim&logoColor=57A143&labelColor=161B22">
-    </a>
-    <img alt="Static Badge" src="https://img.shields.io/badge/NixOS-unstable-d2a8ff?style=for-the-badge&logo=NixOS&logoColor=cba6f7&labelColor=161B22">
     <img alt="Static Badge" src="https://img.shields.io/badge/State-Forever_WIP-ff7b72?style=for-the-badge&logo=fireship&logoColor=ff7b72&labelColor=161B22">
     <a href="https://github.com/simonwjackson/backpacker/pulse">
       <img alt="Last commit" src="https://img.shields.io/github/last-commit/simonwjackson/backpacker?style=for-the-badge&logo=github&logoColor=D9E0EE&labelColor=302D41&color=9fdf9f"/>
     </a>
-    <img alt="Static Badge" src="https://img.shields.io/badge/Powered_by-Electrolytes-79c0ff?style=for-the-badge&logo=nuke&logoColor=79c0ff&labelColor=161B22">
     <a href="https://github.com/simonwjackson/backpacker/tree/main/LICENSE">
       <img alt="License" src="https://img.shields.io/badge/License-MIT-907385605422448742?style=for-the-badge&logo=agpl&color=DDB6F2&logoColor=D9E0EE&labelColor=302D41">
     </a>
+    <br/>
+    <img alt="Static Badge" src="https://img.shields.io/badge/NixOS-unstable-d2a8ff?style=for-the-badge&logo=NixOS&logoColor=cba6f7&labelColor=161B22">
+    <a href="https://snowfall.org/guides/lib/quickstart/">
+      <img alt="Static Badge" src="https://img.shields.io/badge/Powered_by-Snowfall-79c0ff?style=for-the-badge&logo=nixos&logoColor=79c0ff&labelColor=161B22">
+    </a>
+    <br/>
     <a href="https://www.buymeacoffee.com/simonwjackson">
       <img alt="Buy me a coffee" src="https://img.shields.io/badge/Buy%20me%20a%20coffee-grey?style=for-the-badge&logo=buymeacoffee&logoColor=D9E0EE&label=Sponsor&labelColor=302D41&color=ffff99" />
     </a>
