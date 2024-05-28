@@ -9,7 +9,7 @@
   cfg = config.backpacker.gaming.steam;
   snowscape = "/glacier/snowscape";
   steamApps = "${snowscape}/gaming/games/steam/steamapps";
-  steamAppsOverlay = "/home/simonwjackson/.var/app/com.valvesoftware.Steam/data/Steam/steamapps";
+  steamAppsOverlay = "/home/${config.backpacker.user.name}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps";
   mountpoint = "${pkgs.util-linux}/bin/mountpoint";
   mount = "${pkgs.mount}/bin/mount";
 in {

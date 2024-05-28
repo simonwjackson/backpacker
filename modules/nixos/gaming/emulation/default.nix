@@ -9,14 +9,20 @@
   inherit (lib) mkEnableOption mkOption;
 
   cfg = config.backpacker.gaming.emulation;
-  snowscape = "/glacier/snowscape";
-  saves = "${snowscape}/gaming/profiles/${config.backpacker.user.name}/progress/saves";
   share = "/home/${config.backpacker.user.name}/.local/share";
 in {
   options.backpacker.gaming.emulation = {
     enable = mkEnableOption "Whether to enable emulation";
     gen-8 = mkEnableOption "Whether to enable the 8th generation of consoles";
     gen-7 = mkEnableOption "Whether to enable the 7th generation of consoles";
+    gamingDir = mkOption {
+      type = lib.types.path;
+    };
+    saves = mkOption {
+      type = lib.types.path;
+      default = config.backpacker.user.home;
+      description = "Container directory for game saves";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -39,37 +45,37 @@ in {
     # BUG: if dirs dont exist, they are owned by root
     fileSystems = {
       "${share}/dolphin-emu/GC" = {
-        device = "${saves}/nintendo-gamecube/";
+        device = "${cfg.saves}/nintendo-gamecube/";
         options = ["bind"];
       };
 
       "${share}/dolphin-emu/Wii/title" = {
-        device = "${saves}/nintendo-wii/";
+        device = "${cfg.saves}/nintendo-wii/";
         options = ["bind"];
       };
 
       "${share}/Cemu/mlc01/usr" = {
-        device = "${saves}/nintendo-wiiu/";
+        device = "${cfg.saves}/nintendo-wiiu/";
         options = ["bind"];
       };
 
       "${share}/yuzu/sdmc" = {
-        device = "${saves}/nintendo-switch/sdmc";
+        device = "${cfg.saves}/nintendo-switch/sdmc";
         options = ["bind"];
       };
 
       "${share}/yuzu/shader" = {
-        device = "${snowscape}/gaming/launchers/yuzu/shader";
+        device = "${cfg.gamingDir}/launchers/yuzu/shader";
         options = ["bind"];
       };
 
       "${share}/yuzu/keys" = {
-        device = "${snowscape}/gaming/systems/nintendo-switch/keys";
+        device = "${cfg.gamingDir}/systems/nintendo-switch/keys";
         options = ["bind"];
       };
 
       "${share}/yuzu/nand" = {
-        device = "${saves}/nintendo-switch/nand";
+        device = "${cfg.saves}/nintendo-switch/nand";
         options = ["bind"];
       };
     };
