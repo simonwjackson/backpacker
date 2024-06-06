@@ -32,7 +32,6 @@ in {
     services = {
       xserver = {
         enable = true;
-        desktopManager.plasma5 = enabled;
       };
 
       displayManager =
