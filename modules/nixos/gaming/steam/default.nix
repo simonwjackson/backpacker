@@ -7,14 +7,17 @@
   ...
 }: let
   cfg = config.backpacker.gaming.steam;
-  snowscape = "/glacier/snowscape";
-  steamApps = "${snowscape}/gaming/games/steam/steamapps";
   steamAppsOverlay = "/home/${config.backpacker.user.name}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps";
   mountpoint = "${pkgs.util-linux}/bin/mountpoint";
   mount = "${pkgs.mount}/bin/mount";
 in {
   options.backpacker.gaming.steam = {
     enable = lib.mkEnableOption "Enable steam";
+    steamApps = lib.mkOption {
+      type = lib.types.path;
+      # steamApps = "${snowscape}/gaming/games/steam/steamapps";
+      description = "";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -41,9 +44,9 @@ in {
     systemd.services.mountSteamAppsOverlay = {
       # after = ["mountSnowscape.service"];
       script = ''
-        install -d -o ${config.backpacker.user.name} -g users -m 770 ${steamApps}
+        install -d -o ${config.backpacker.user.name} -g users -m 770 ${cfg.steamApps}
         install -d -o ${config.backpacker.user.name} -g users -m 770 /home/${config.backpacker.user.name}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps
-        ${mountpoint} -q ${steamAppsOverlay} || ${mount} --bind ${steamApps} ${steamAppsOverlay}
+        ${mountpoint} -q ${steamAppsOverlay} || ${mount} --bind ${cfg.steamApps} ${steamAppsOverlay}
       '';
       wantedBy = ["multi-user.target"];
       serviceConfig = {
