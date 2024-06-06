@@ -27,7 +27,7 @@ in {
     services = {
       xserver = {
         enable = true;
-        desktopManager.plasma5 = enabled;
+        desktopManager.plasma6 = enabled;
       };
 
       displayManager =
@@ -38,7 +38,7 @@ in {
           };
         }
         // lib.mkIf cfg.autoLogin {
-          defaultSession = "plasmawayland";
+          defaultSession = "plasma";
           autoLogin = {
             enable = true;
             user = config.backpacker.user.name;
