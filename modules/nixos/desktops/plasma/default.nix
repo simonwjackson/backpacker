@@ -12,10 +12,12 @@
 }: let
   inherit (lib.backpacker) enabled;
 
-  cfg = config.backpacker.desktop.plasma;
+  cfg = config.backpacker.desktops.plasma;
 in {
-  options.backpacker.desktop.plasma = {
+  options.backpacker.desktops.plasma = {
     enable = lib.mkEnableOption "Whether to enable the plasma desktop";
+
+    autoLogin = lib.mkEnableOption "Whether to auto login to the plasma desktop";
   };
 
   config = lib.mkIf cfg.enable {
@@ -28,17 +30,20 @@ in {
         desktopManager.plasma5 = enabled;
       };
 
-      displayManager = {
-        sddm = {
-          enable = true;
-          wayland.enable = true;
+      displayManager =
+        {
+          sddm = {
+            enable = true;
+            wayland.enable = true;
+          };
+        }
+        // lib.mkIf cfg.autoLogin {
+          defaultSession = "plasmawayland";
+          autoLogin = {
+            enable = true;
+            user = config.backpacker.user.name;
+          };
         };
-        defaultSession = "plasmawayland";
-        autoLogin = {
-          enable = true;
-          user = config.backpacker.user.name;
-        };
-      };
     };
 
     environment.sessionVariables = {

@@ -15,6 +15,9 @@ in {
   config = {
     backpacker = {
       agenix = mkDefault enabled;
+      desktops = {
+        hyprland = mkDefault disabled;
+      };
       atuin = {
         enable = true;
         key_path = config.age.secrets.atuin_key.path;
