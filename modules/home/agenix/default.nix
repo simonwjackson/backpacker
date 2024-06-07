@@ -29,9 +29,10 @@ in {
     age = {
       identityPaths =
         options.age.identityPaths.default
-        ++ [
-          "${config.home.homeDirectory}/.ssh/agenix"
-        ];
+        ++ (filter pathExists [
+          "${config.user.home}/.ssh/id_ed25519"
+          "${config.user.home}/.ssh/id_rsa"
+        ]);
 
       secrets =
         if pathExists secretsFile
@@ -42,10 +43,5 @@ in {
             }) (import secretsFile)
         else {};
     };
-
-    # age.identityPaths = options.age.identityPaths.default ++ (filter pathExists [
-    #   "${config.user.home}/.ssh/id_ed25519"
-    #   "${config.user.home}/.ssh/id_rsa"
-    # ]);
   };
 }

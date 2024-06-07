@@ -15,12 +15,19 @@ in {
     enable = lib.mkEnableOption "Enable steam";
     steamApps = lib.mkOption {
       type = lib.types.path;
-      # steamApps = "${snowscape}/gaming/games/steam/steamapps";
       description = "";
     };
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      pkgs.antimicrox
+    ];
+
+    services.udev.extraRules = ''
+      SUBSYSTEM=="misc", KERNEL=="uinput", OPTIONS+="static_node=uinput", TAG+="uaccess"
+    '';
+
     services.flatpak.enable = true;
     xdg.portal = {
       enable = true;
@@ -39,6 +46,7 @@ in {
       "com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
       "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/23.08"
       "org.freedesktop.Platform.VulkanLayer.gamescope/x86_64/23.08"
+      "io.github.antimicrox.antimicrox"
     ];
 
     systemd.services.mountSteamAppsOverlay = {

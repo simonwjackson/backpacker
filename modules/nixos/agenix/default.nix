@@ -35,11 +35,11 @@ in {
     # environment.systemPackages = [ragenix.packages.x86_64-linux.default];
     age = {
       identityPaths =
-        options.age.identityPaths.default
-        ++ [
-          # TODO: Pull this value from somewhere else in the config
-          "/home/${cfg.user}/.ssh/agenix"
-        ];
+        options.age.identityPaths.default;
+      # ++ [
+      #   # TODO: Pull this value from somewhere else in the config
+      #   "/home/${cfg.user}/.ssh/agenix"
+      # ];
 
       secrets =
         if pathExists secretsFile

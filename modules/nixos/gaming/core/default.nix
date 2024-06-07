@@ -16,6 +16,17 @@ in {
 
   config = lib.mkIf cfg.enable {
     # services.input-remapper.enable = false;
+    environment.systemPackages = [
+      pkgs.antimicrox
+      pkgs.moonlight-qt
+    ];
+
+    services.udev.extraRules = ''
+      SUBSYSTEM=="misc", KERNEL=="uinput", OPTIONS+="static_node=uinput", TAG+="uaccess"
+    '';
+    services.flatpak.packages = [
+      "io.github.antimicrox.antimicrox"
+    ];
 
     # Switch controllers
     services.joycond.enable = true;

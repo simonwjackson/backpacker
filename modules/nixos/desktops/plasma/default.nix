@@ -25,16 +25,17 @@ in {
     programs.xwayland = enabled;
 
     services = {
+      desktopManager.plasma6 = enabled;
+
       xserver = {
         enable = true;
-        desktopManager.plasma6 = enabled;
       };
 
       displayManager =
         {
           sddm = {
             enable = true;
-            wayland.enable = true;
+            wayland = enabled;
           };
         }
         // lib.mkIf cfg.autoLogin {
