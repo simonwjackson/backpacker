@@ -15,7 +15,10 @@ in {
 
   config = lib.mkIf cfg.enable {
     services.automatic-timezoned.enable = true;
+    services.localtimed.enable = true;
+    location.provider = "geoclue2";
     services.geoclue2.enable = true;
+    services.geoclue2.enableDemoAgent = lib.mkForce true;
 
     i18n.defaultLocale = "en_US.UTF-8";
     i18n.extraLocaleSettings = {
