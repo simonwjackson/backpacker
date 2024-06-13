@@ -26,6 +26,11 @@ in {
       package = inputs.hyprland.packages.${system}.hyprland;
     };
 
+    environment.systemPackages = [
+      pkgs.ddcutil
+      pkgs.eww
+    ];
+
     xdg.portal = enabled;
     programs.xwayland = enabled;
 
@@ -34,20 +39,13 @@ in {
         enable = true;
       };
 
-      displayManager =
-        {
-          sddm = {
-            enable = true;
-            wayland.enable = true;
-          };
-        }
-        // lib.mkIf cfg.autoLogin {
-          defaultSession = "hyprland";
-          autoLogin = {
-            enable = true;
-            user = config.backpacker.user.name;
-          };
-        };
+      displayManager.sddm.wayland = enabled;
+      displayManager.sddm.enable = true;
+      displayManager.defaultSession = lib.mkIf cfg.autoLogin "hyprland";
+      displayManager.autoLogin = lib.mkIf cfg.autoLogin {
+        enable = true;
+        user = config.backpacker.user.name;
+      };
     };
 
     environment.sessionVariables = {
