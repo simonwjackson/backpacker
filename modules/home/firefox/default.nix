@@ -21,12 +21,12 @@ in {
       enable = true;
       nativeMessagingHosts = [pkgs.tridactyl-native];
 
-      package = pkgs.firefox-esr.override {
-        # See nixpkgs' firefox/wrapper.nix to check which options you can use
-        cfg = {
-          # Tridactyl native connector
-        };
-      };
+      # package = pkgs.firefox-esr.override {
+      #   # See nixpkgs' firefox/wrapper.nix to check which options you can use
+      #   cfg = {
+      #     # Tridactyl native connector
+      #   };
+      # };
 
       profiles.simonwjackson = {
         isDefault = true;
