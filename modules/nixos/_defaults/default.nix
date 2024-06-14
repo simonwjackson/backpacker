@@ -14,7 +14,7 @@ in {
   programs.icho = {
     enable = true;
     environment = {
-      NOTES_DIR = "/glacier/snowscape/notes";
+      NOTES_DIR = "/snowscape/notes";
     };
     environmentFiles = [
       config.age.secrets."user-simonwjackson-anthropic".path
@@ -57,7 +57,7 @@ in {
   # services.udisks2.enable = true;
 
   # TODO: Move to (desktop?) profile
-  environment.variables.BROWSER = "firefox-esr";
+  environment.variables.BROWSER = "firefox";
 
   programs.tmesh = let
     systems = ../../../systems;
@@ -128,7 +128,7 @@ in {
           projects = [
             {
               identifier = ".bare$|^.git$";
-              root = "/glacier/snowscape/code";
+              root = "/snowscape/code";
             }
           ];
         };
