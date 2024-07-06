@@ -63,9 +63,8 @@
       (getSyncthingConfig target host).paths);
 in {
   options.backpacker.syncthing =
-    {
-      enable = lib.mkEnableOption "Whether to enable syncthing";
-
+    options.services.syncthing
+    // {
       otherDevices = lib.mkOption {
         type = lib.types.attrsOf (lib.types.submodule {
           options = {
@@ -104,8 +103,7 @@ in {
         default = config.networking.hostName;
         description = "";
       };
-    }
-    // options.services.syncthing;
+    };
 
   config = lib.mkIf cfg.enable {
     services.syncthing = {
