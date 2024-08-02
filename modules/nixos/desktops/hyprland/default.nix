@@ -29,6 +29,13 @@ in {
     environment.systemPackages = [
       pkgs.ddcutil
       pkgs.eww
+      # HACK
+      pkgs.slurp
+      pkgs.pngquant
+      pkgs.grim
+      pkgs.jq
+      pkgs.swappy
+      pkgs.wl-clipboard
     ];
 
     xdg.portal = enabled;

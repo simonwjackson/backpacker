@@ -58,15 +58,15 @@ in {
       };
     };
 
-    services.xserver.displayManager.setupCommands = ''
-      ${pkgs.xorg.xrandr}/bin/xrandr --newmode "1280x720_120"  162.00  1280 1376 1512 1744  720 723 728 775 -hsync +vsync
-
-      ${builtins.concatStringsSep "\n" (map (port: ''
-          # Resolutions for ${port}
-
-          ${pkgs.xorg.xrandr}/bin/xrandr --addmode "${port}" 1280x720_120"
-        '')
-        ports)}
-    '';
+    # services.xserver.displayManager.setupCommands = ''
+    #   ${pkgs.xorg.xrandr}/bin/xrandr --newmode "1280x720_120"  162.00  1280 1376 1512 1744  720 723 728 775 -hsync +vsync
+    #
+    #   ${builtins.concatStringsSep "\n" (map (port: ''
+    #       # Resolutions for ${port}
+    #
+    #       ${pkgs.xorg.xrandr}/bin/xrandr --addmode "${port}" 1280x720_120"
+    #     '')
+    #     ports)}
+    # '';
   };
 }
