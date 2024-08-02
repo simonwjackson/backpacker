@@ -16,7 +16,7 @@ in {
   config = lib.mkIf cfg.enable {
     services = {
       auto-cpufreq = enabled;
-      power-profiles-daemon = enabled;
+      # power-profiles-daemon = enabled;
       thermald.enable = config.backpacker.hardware.cpu.type == "intel";
       # a shell daemon created to manage processes' IO and CPU priorities, with community-driven set of rule
       ananicy = {

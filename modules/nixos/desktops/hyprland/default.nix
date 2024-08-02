@@ -32,12 +32,12 @@ in {
     ];
 
     xdg.portal = enabled;
-    programs.xwayland = enabled;
+    # programs.xwayland = enabled;
 
     services = {
-      xserver = {
-        enable = true;
-      };
+      # xserver = {
+      #   enable = true;
+      # };
 
       displayManager.sddm.wayland = enabled;
       displayManager.sddm.enable = true;
