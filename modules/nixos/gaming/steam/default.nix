@@ -13,10 +13,10 @@
 in {
   options.backpacker.gaming.steam = {
     enable = lib.mkEnableOption "Enable steam";
-    steamApps = lib.mkOption {
-      type = lib.types.path;
-      description = "";
-    };
+    # steamApps = lib.mkOption {
+    #   type = lib.types.path;
+    #   description = "";
+    # };
   };
 
   config = lib.mkIf cfg.enable {
@@ -49,17 +49,17 @@ in {
       "io.github.antimicrox.antimicrox"
     ];
 
-    systemd.services.mountSteamAppsOverlay = {
-      # after = ["mountSnowscape.service"];
-      script = ''
-        install -d -o ${config.backpacker.user.name} -g users -m 770 ${cfg.steamApps}
-        install -d -o ${config.backpacker.user.name} -g users -m 770 /home/${config.backpacker.user.name}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps
-        ${mountpoint} -q ${steamAppsOverlay} || ${mount} --bind ${cfg.steamApps} ${steamAppsOverlay}
-      '';
-      wantedBy = ["multi-user.target"];
-      serviceConfig = {
-        Type = "oneshot";
-      };
-    };
+    # systemd.services.mountSteamAppsOverlay = {
+    #   # after = ["mountSnowscape.service"];
+    #   script = ''
+    #     install -d -o ${config.backpacker.user.name} -g users -m 770 ${cfg.steamApps}
+    #     install -d -o ${config.backpacker.user.name} -g users -m 770 /home/${config.backpacker.user.name}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps
+    #     ${mountpoint} -q ${steamAppsOverlay} || ${mount} --bind ${cfg.steamApps} ${steamAppsOverlay}
+    #   '';
+    #   wantedBy = ["multi-user.target"];
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #   };
+    # };
   };
 }

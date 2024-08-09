@@ -27,7 +27,12 @@ in {
       })
 
       (lib.mkIf (cfg.type == "amd") {
-        boot.kernelModules = ["kvm-amd"];
+        boot.kernelModules = [
+          "kvm-amd"
+          # "amdgpu"
+          # TODO: move this to ryzen config file
+          # "ryzen_smu"
+        ];
         hardware.cpu.amd.updateMicrocode = true;
 
         environment.systemPackages = with pkgs; [

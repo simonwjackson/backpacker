@@ -13,7 +13,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    sound.enable = true;
+    # sound.enable = true;
     hardware.pulseaudio.enable = false;
 
     # Bluetooth audio
