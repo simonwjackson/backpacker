@@ -27,10 +27,14 @@ in {
   #   settings = mkEnableOption "enable hyprland window manager";
   # };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     nix.settings = {
-      trusted-substituters = ["https://hyprland.cachix.org"];
-      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+      trusted-substituters = lib.mkAfter [
+        "https://hyprland.cachix.org"
+      ];
+      trusted-public-keys = lib.mkAfter [
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      ];
     };
 
     # wayland.windowManager.hyprland.systemd.variables = ["-all"];
