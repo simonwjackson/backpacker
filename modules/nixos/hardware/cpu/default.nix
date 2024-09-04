@@ -27,11 +27,17 @@ in {
       })
 
       (lib.mkIf (cfg.type == "amd") {
+        boot.initrd.kernelModules = [
+          "amdgpu"
+        ];
+        services.udev.extraRules = ''
+          KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
+        '';
+        boot.kernelParams = ["amd_pstate=passive" "amd_pstate.shared_mem=1"]; # Add this line
         boot.kernelModules = [
           "kvm-amd"
-          # "amdgpu"
           # TODO: move this to ryzen config file
-          # "ryzen_smu"
+          "ryzen_smu"
         ];
         hardware.cpu.amd.updateMicrocode = true;
 

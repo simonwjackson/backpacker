@@ -8,6 +8,7 @@
     suyu.url = "github:Noodlez1232/suyu-flake";
     nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     disko.url = "github:nix-community/disko";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     hyprland = {
       url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
@@ -78,6 +79,7 @@
         # icho.nixosModules.default
         # nix-flatpak.nixosModules.nix-flatpak
         # tmesh.nixosModules.default
+        chaotic.nixosModules.default
       ];
 
       systems.modules.darwin = with inputs; [
@@ -92,6 +94,7 @@
 
       overlays = with inputs; [
         snowfall-frost.overlays.default
+        chaotic.overlays.default
       ];
 
       channels-config = {
