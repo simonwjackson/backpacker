@@ -15,9 +15,9 @@ in {
     enable = mkEnableOption "Whether to enable emulation";
     gen-8 = mkEnableOption "Whether to enable the 8th generation of consoles";
     gen-7 = mkEnableOption "Whether to enable the 7th generation of consoles";
-    gamingDir = mkOption {
-      type = lib.types.path;
-    };
+    # gamingDir = mkOption {
+    #   type = lib.types.path;
+    # };
     saves = mkOption {
       type = lib.types.path;
       default = config.backpacker.user.home;
@@ -59,25 +59,25 @@ in {
         options = ["bind"];
       };
 
-      "${share}/yuzu/sdmc" = {
-        device = "${cfg.saves}/nintendo-switch/sdmc";
-        options = ["bind"];
-      };
-
-      "${share}/yuzu/shader" = {
-        device = "${cfg.gamingDir}/launchers/yuzu/shader";
-        options = ["bind"];
-      };
-
-      "${share}/yuzu/keys" = {
-        device = "${cfg.gamingDir}/systems/nintendo-switch/keys";
-        options = ["bind"];
-      };
-
-      "${share}/yuzu/nand" = {
-        device = "${cfg.saves}/nintendo-switch/nand";
-        options = ["bind"];
-      };
+      # "${share}/yuzu/sdmc" = {
+      #   device = "${cfg.saves}/nintendo-switch/sdmc";
+      #   options = ["bind"];
+      # };
+      #
+      # "${share}/yuzu/shader" = {
+      #   device = "${cfg.gamingDir}/launchers/yuzu/shader";
+      #   options = ["bind"];
+      # };
+      #
+      # "${share}/yuzu/keys" = {
+      #   device = "${cfg.gamingDir}/systems/nintendo-switch/keys";
+      #   options = ["bind"];
+      # };
+      #
+      # "${share}/yuzu/nand" = {
+      #   device = "${cfg.saves}/nintendo-switch/nand";
+      #   options = ["bind"];
+      # };
     };
   };
 }

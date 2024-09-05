@@ -56,16 +56,16 @@ in {
     };
 
     backpacker.gaming.sunshine.enable = cfg.isHost;
-    systemd.user.services.startSteam = lib.mkIf (cfg.isHost) {
-      path = [pkgs.flatpak];
-      description = "Start Steam Flatpak app";
-      wantedBy = ["graphical-session.target"];
-      partOf = ["graphical-session.target"];
-      after = ["mountSteamAppsOverlay.service"];
-      serviceConfig = {
-        ExecStart = "${flatpak} run com.valvesoftware.Steam -forcedesktopscaling=1.5 -silent";
-        Restart = "on-failure";
-      };
-    };
+    # systemd.user.services.startSteam = lib.mkIf (cfg.isHost) {
+    #   path = [pkgs.flatpak];
+    #   description = "Start Steam Flatpak app";
+    #   wantedBy = ["graphical-session.target"];
+    #   partOf = ["graphical-session.target"];
+    #   after = ["mountSteamAppsOverlay.service"];
+    #   serviceConfig = {
+    #     ExecStart = "${flatpak} run com.valvesoftware.Steam -forcedesktopscaling=1.5 -silent";
+    #     Restart = "on-failure";
+    #   };
+    # };
   };
 }

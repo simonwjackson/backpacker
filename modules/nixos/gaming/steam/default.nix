@@ -25,8 +25,8 @@ in {
 
   config = lib.mkIf cfg.enable {
     # chaotic.appmenu-gtk3-module.enable = true;
-    chaotic.mesa-git.enable = true;
-    chaotic.mesa-git.fallbackSpecialisation = true;
+    # chaotic.mesa-git.enable = true;
+    # chaotic.mesa-git.fallbackSpecialisation = true;
     chaotic.steam.extraCompatPackages = with pkgs; [
       # proton-ge-custom
       # gamescope
