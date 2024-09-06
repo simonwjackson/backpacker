@@ -28,9 +28,9 @@ in {
     # chaotic.mesa-git.enable = true;
     # chaotic.mesa-git.fallbackSpecialisation = true;
     chaotic.steam.extraCompatPackages = with pkgs; [
-      # proton-ge-custom
-      # gamescope
-      # mangohud
+      proton-ge-custom
+      gamescope
+      mangohud
     ];
 
     hardware = {
@@ -55,6 +55,7 @@ in {
             with pkgs; [
               gamescope-wsi_git
               gamescope_git
+              proton-ge-custom
               # stable.gamescope
               xorg.libXcursor
               xorg.libXi
