@@ -295,6 +295,9 @@ in {
       enable = true;
       userName = "Simon W. Jackson";
       userEmail = "hello@simonwjackson.io";
+      config = {
+        pull.rebase = true;
+      };
 
       delta = {
         enable = true;
