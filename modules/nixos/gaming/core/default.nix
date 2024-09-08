@@ -24,38 +24,14 @@ in {
     services.udev.extraRules = ''
       SUBSYSTEM=="misc", KERNEL=="uinput", OPTIONS+="static_node=uinput", TAG+="uaccess"
     '';
-    services.flatpak.packages = [
-      "io.github.antimicrox.antimicrox"
-    ];
+    # services.flatpak.packages = [
+    #   "io.github.antimicrox.antimicrox"
+    # ];
 
     # Switch controllers
     services.joycond.enable = true;
 
-    # WARN: untested
-    programs.gamemode = {
-      enable = true;
-      enableRenice = true;
-      settings = {
-        custom = {
-          start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
-          end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
-        };
-
-        general = {
-          softrealtime = "on";
-          inhibit_screensaver = 1;
-          renice = 10;
-        };
-
-        # gpu = {
-        #   apply_gpu_optimisations = "accept-responsibility";
-        #   gpu_device = 0;
-        #   amd_performance_level = "high";
-        # };
-      };
-    };
-
-    backpacker.gaming.sunshine.enable = cfg.isHost;
+    # backpacker.gaming.sunshine.enable = cfg.isHost;
     # systemd.user.services.startSteam = lib.mkIf (cfg.isHost) {
     #   path = [pkgs.flatpak];
     #   description = "Start Steam Flatpak app";
