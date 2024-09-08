@@ -14,6 +14,7 @@
 
   cfg = config.backpacker.desktops.hyprland;
 in {
+  imports = [./hyprlandControl.nix];
   options.backpacker.desktops.hyprland = {
     enable = lib.mkEnableOption "Whether to enable the hyprland desktop";
 
