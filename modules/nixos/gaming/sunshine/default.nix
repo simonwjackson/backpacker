@@ -49,6 +49,10 @@
   cfg = config.backpacker.gaming.sunshine;
   sunshineConfig = config.services.sunshine;
 in {
+  imports = [
+    ./virtualGamepad.nix
+  ];
+
   options.backpacker.gaming.sunshine = {
     enable = mkEnableOption "Sunshine, a self-hosted game stream host for Moonlight";
     applications = mkOption {
@@ -98,6 +102,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+    services.virtualGamepadProxy.enable = true;
+
     services.sunshine = {
       enable = true;
       settings = {
