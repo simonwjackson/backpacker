@@ -58,40 +58,10 @@ in {
         options = ["bind"];
       };
 
-      "/home/${config.backpacker.user.name}/.config/Ryujinx/bis/user/save" = {
-        device = "${cfg.saves}/nintendo-switch/";
+      "/home/${config.backpacker.user.name}/.config/Ryujinx/bis" = {
+        device = "${cfg.saves}/nintendo-switch";
         options = ["bind"];
       };
-
-      # "${share}/suyu/sdmc" = {
-      #   device = "${cfg.saves}/nintendo-switch/sdmc";
-      #   options = ["bind"];
-      # };
-      #
-      # "${share}/yuzu/sdmc" = {
-      #   device = "${cfg.saves}/nintendo-switch/sdmc";
-      #   options = ["bind"];
-      # };
-      #
-      # "${share}/yuzu/shader" = {
-      #   device = "${cfg.gamingDir}/launchers/yuzu/shader";
-      #   options = ["bind"];
-      # };
-      #
-      # "${share}/yuzu/keys" = {
-      #   device = "${cfg.gamingDir}/systems/nintendo-switch/keys";
-      #   options = ["bind"];
-      # };
-      #
-      # "${share}/suyu/nand" = {
-      #   device = "${cfg.saves}/nintendo-switch/nand";
-      #   options = ["bind"];
-      # };
-      #
-      # "${share}/yuzu/nand" = {
-      #   device = "${cfg.saves}/nintendo-switch/nand";
-      #   options = ["bind"];
-      # };
     };
   };
 }
