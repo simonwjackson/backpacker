@@ -32,7 +32,7 @@ in {
       ];
       gen-8 = [
         pkgs.cemu
-        inputs.suyu.packages."${system}".suyu
+        pkgs.ryujinx
       ];
     in
       [
