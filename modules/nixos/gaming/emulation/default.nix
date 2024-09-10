@@ -15,12 +15,11 @@ in {
     enable = mkEnableOption "Whether to enable emulation";
     gen-8 = mkEnableOption "Whether to enable the 8th generation of consoles";
     gen-7 = mkEnableOption "Whether to enable the 7th generation of consoles";
-    # gamingDir = mkOption {
-    #   type = lib.types.path;
-    # };
+    gamingDir = mkOption {
+      type = lib.types.path;
+    };
     saves = mkOption {
       type = lib.types.path;
-      default = config.backpacker.user.home;
       description = "Container directory for game saves";
     };
   };
@@ -37,7 +36,7 @@ in {
       ];
     in
       [
-        pkgs.retroarchFull
+        # pkgs.retroarchFull
       ]
       ++ lib.optionals cfg.gen-8 gen-7
       ++ lib.optionals cfg.gen-8 gen-8;
@@ -59,6 +58,16 @@ in {
         options = ["bind"];
       };
 
+      "/home/${config.backpacker.user.name}/.config/Ryujinx/bis/user/save" = {
+        device = "${cfg.saves}/nintendo-switch/";
+        options = ["bind"];
+      };
+
+      # "${share}/suyu/sdmc" = {
+      #   device = "${cfg.saves}/nintendo-switch/sdmc";
+      #   options = ["bind"];
+      # };
+      #
       # "${share}/yuzu/sdmc" = {
       #   device = "${cfg.saves}/nintendo-switch/sdmc";
       #   options = ["bind"];
@@ -71,6 +80,11 @@ in {
       #
       # "${share}/yuzu/keys" = {
       #   device = "${cfg.gamingDir}/systems/nintendo-switch/keys";
+      #   options = ["bind"];
+      # };
+      #
+      # "${share}/suyu/nand" = {
+      #   device = "${cfg.saves}/nintendo-switch/nand";
       #   options = ["bind"];
       # };
       #
