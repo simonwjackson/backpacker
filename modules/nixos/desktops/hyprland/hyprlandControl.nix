@@ -19,7 +19,7 @@ in {
       type = types.package;
       default = pkgs.writeShellScript "hyprland-control" ''
         # HACK:
-        $XDG_RUNTIME_DIR="/run/user/1000"
+        export XDG_RUNTIME_DIR="/run/user/1000"
         HYPRLAND_INSTANCE_SIGNATURE=$(${pkgs.findutils}/bin/find "$XDG_RUNTIME_DIR/hypr/" -maxdepth 1 -type d | ${pkgs.gnugrep}/bin/grep -v "^$XDG_RUNTIME_DIR/hypr/$" | ${pkgs.gawk}/bin/awk -F'/' '{print $NF}')
         export HYPRLAND_INSTANCE_SIGNATURE
 
@@ -57,7 +57,8 @@ in {
             fi
 
             echo -en "$RESPONSE_OK"
-            ${pkgs.hyprland}/bin/hyprctl keyword monitor "''${monitor},''${width}x''${height}@''${refresh},auto" >/dev/null 2>&1
+            ${pkgs.hyprland}/bin/hyprctl keyword monitor "''${monitor},''${width}x''${height}@''${refresh},auto"
+            # >/dev/null 2>&1
             echo "{\"message\": \"Resolution changed\", \"monitor\": \"$monitor\", \"width\": $width, \"height\": $height}"
             ;;
           "GET /api/monitors")
@@ -115,15 +116,15 @@ in {
       serviceConfig = {
         ExecStart = cfg.package;
         Restart = "on-failure";
-        DynamicUser = true;
-        RuntimeDirectory = "hyprland-control";
-        RuntimeDirectoryMode = "0755";
-        StateDirectory = "hyprland-control";
-        StateDirectoryMode = "0700";
-        ProtectSystem = "strict";
-        PrivateDevices = true;
-        ProtectHome = true;
-        NoNewPrivileges = true;
+        # DynamicUser = true;
+        # RuntimeDirectory = "hyprland-control";
+        # RuntimeDirectoryMode = "0755";
+        # StateDirectory = "hyprland-control";
+        # StateDirectoryMode = "0700";
+        # ProtectSystem = "strict";
+        # PrivateDevices = true;
+        # ProtectHome = true;
+        # NoNewPrivileges = true;
       };
     };
   };
