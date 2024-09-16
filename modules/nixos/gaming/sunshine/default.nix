@@ -106,13 +106,13 @@ in {
 
     services.sunshine = {
       enable = true;
+      openFirewall = true;
       settings = {
         log_path = logPath;
         output_name = 0;
         key_rightalt_to_key_win = "enabled";
       };
-      capSysAdmin = true;
-      autoStart = true;
+      autoStart = false;
       applications = lib.mkMerge [
         {
           env = {
@@ -138,29 +138,31 @@ in {
       ];
     };
 
-    # services.udev.extraRules = ''
-    #   KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
-    #   KERNEL=="uinput", SUBSYSTEM=="misc", OPTIONS+="static_node=uinput", TAG+="uaccess"
-    # '';
-    #
-    # environment.systemPackages = [
-    #   pkgs.sunshine
-    # ];
-    #
-    # security.wrappers.sunshine = {
-    #   owner = "root";
-    #   group = "root";
-    #   capabilities = "cap_sys_admin+p";
-    #   source = "${pkgs.sunshine}/bin/sunshine";
-    # };
-    #
-    # systemd.user.services.sunshine = {
-    #   description = "sunshine";
-    #   wantedBy = ["graphical-session.target"];
-    #   serviceConfig = {
-    #     ExecStart = "${config.security.wrapperDir}/sunshine";
-    #     Restart = "always";
-    #   };
-    # };
+    services.udev.extraRules = ''
+      KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
+      KERNEL=="uinput", SUBSYSTEM=="misc", OPTIONS+="static_node=uinput", TAG+="uaccess"
+    '';
+
+    environment.systemPackages = [
+      pkgs.sunshine
+    ];
+
+    security.wrappers = {
+      sunshine = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_sys_admin+p";
+        source = "${pkgs.sunshine}/bin/sunshine";
+      };
+    };
+
+    systemd.user.services.sunshine = lib.mkForce {
+      description = "sunshine";
+      wantedBy = ["graphical-session.target"];
+      serviceConfig = {
+        ExecStart = "${config.security.wrapperDir}/sunshine";
+        Restart = "always";
+      };
+    };
   };
 }
