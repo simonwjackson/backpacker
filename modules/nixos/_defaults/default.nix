@@ -23,35 +23,6 @@ in {
 
   programs.zsh.enable = true;
 
-  backpacker = {
-    adb = mkDefault disabled;
-    agenix = mkDefault enabled;
-    boot = mkDefault enabled;
-    hardware = {
-      battery = mkDefault disabled;
-      bluetooth = mkDefault disabled;
-      cpu = mkDefault enabled;
-      hybrid-sleep = mkDefault disabled;
-      touchpad = mkDefault disabled;
-    };
-    networking = {
-      core = mkDefault enabled;
-      secure-shell = mkDefault enabled;
-      tailscaled = mkDefault enabled;
-      zerotierone = mkDefault enabled;
-    };
-    performance = mkDefault enabled;
-    printing = mkDefault enabled;
-    security = mkDefault enabled;
-    sound = mkDefault enabled;
-    syncthing = mkDefault disabled;
-    user = {
-      enable = mkDefault true;
-      name = mkDefault "simonwjackson";
-      hashedPasswordFile = mkDefault config.age.secrets."user-simonwjackson".path;
-    };
-  };
-
   environment.pathsToLink = ["/share/zsh"];
 
   # services.udisks2.enable = true;

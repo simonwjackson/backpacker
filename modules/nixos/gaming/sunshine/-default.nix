@@ -49,10 +49,6 @@
   cfg = config.backpacker.gaming.sunshine;
   sunshineConfig = config.services.sunshine;
 in {
-  imports = [
-    ./virtualGamepad.nix
-  ];
-
   options.backpacker.gaming.sunshine = {
     enable = mkEnableOption "Sunshine, a self-hosted game stream host for Moonlight";
     applications = mkOption {
@@ -102,17 +98,16 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.virtualGamepadProxy.enable = true;
-
     services.sunshine = {
       enable = true;
       openFirewall = true;
+      capSysAdmin = true;
       settings = {
         log_path = logPath;
         output_name = 0;
         key_rightalt_to_key_win = "enabled";
       };
-      autoStart = false;
+      autoStart = true;
       applications = lib.mkMerge [
         {
           env = {
@@ -143,26 +138,26 @@ in {
       KERNEL=="uinput", SUBSYSTEM=="misc", OPTIONS+="static_node=uinput", TAG+="uaccess"
     '';
 
-    environment.systemPackages = [
-      pkgs.sunshine
-    ];
+    # environment.systemPackages = [
+    #   pkgs.sunshine
+    # ];
 
-    security.wrappers = {
-      sunshine = {
-        owner = "root";
-        group = "root";
-        capabilities = "cap_sys_admin+p";
-        source = "${pkgs.sunshine}/bin/sunshine";
-      };
-    };
-
-    systemd.user.services.sunshine = lib.mkForce {
-      description = "sunshine";
-      wantedBy = ["graphical-session.target"];
-      serviceConfig = {
-        ExecStart = "${config.security.wrapperDir}/sunshine";
-        Restart = "always";
-      };
-    };
+    # security.wrappers = {
+    #   sunshine = {
+    #     owner = "root";
+    #     group = "root";
+    #     capabilities = "cap_sys_admin+p";
+    #     source = "${pkgs.sunshine}/bin/sunshine";
+    #   };
+    # };
+    #
+    # systemd.user.services.sunshine = lib.mkForce {
+    #   description = "sunshine";
+    #   wantedBy = ["graphical-session.target"];
+    #   serviceConfig = {
+    #     ExecStart = "${config.security.wrapperDir}/sunshine";
+    #     Restart = "always";
+    #   };
+    # };
   };
 }
