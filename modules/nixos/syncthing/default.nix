@@ -1,4 +1,3 @@
-# Imports and inheritances
 {
   config,
   pkgs,
@@ -43,43 +42,44 @@
   in
     allConfigs;
 
-  # Helper function to check if a device has the specified folder
-  isDeviceInFolder = folderName: config:
-    config.paths ? "${folderName}";
+  # Helper function to check if a device has the specified share
+  isDeviceInShare = shareName: config:
+    config.shares ? "${shareName}";
 
-  # Helper function to get devices for a specific folder
-  getDevicesForFolder = folderName: hostName: config:
-    if isDeviceInFolder folderName config
+  # Helper function to get devices for a specific share
+  getDevicesForShare = shareName: hostName: config:
+    if isDeviceInShare shareName config
     then [hostName]
     else [];
 
-  getFolderDevices = folderName: let
+  getShareDevices = shareName: let
     devicesPerHost =
       lib.mapAttrsToList
-      (hostName: config: getDevicesForFolder folderName hostName config)
+      (hostName: config: getDevicesForShare shareName hostName config)
       allSyncthingConfigs;
   in
     lib.flatten devicesPerHost;
 
-  # Helper function to check if a device has the specified folder
-  deviceHasFolder = folder: device:
-    builtins.elem folder device.folders;
+  # Helper function to check if a device has the specified share
+  deviceHasShare = share: device:
+    builtins.elem share device.shares;
 
-  # Helper function to filter devices that have the specified folder
-  filterDevicesWithFolder = devices: folder:
-    lib.filterAttrs (name: device: deviceHasFolder folder device) devices;
+  # Helper function to filter devices that have the specified share
+  filterDevicesWithShare = devices: share:
+    lib.filterAttrs (name: device: deviceHasShare share device) devices;
 
-  # Main function to get names of devices with the specified folder
-  getDevicesWithFolder = devices: folder: let
-    devicesWithFolder = filterDevicesWithFolder devices folder;
+  # Main function to get names of devices with the specified share
+  getDevicesWithShare = devices: share: let
+    devicesWithShare = filterDevicesWithShare devices share;
   in
-    builtins.attrNames devicesWithFolder;
+    builtins.attrNames devicesWithShare;
 
-  getHostFolders = lib.mapAttrsToList (name: value: {
-    "${name}" = {
-      path = value;
-      devices = getFolderDevices name ++ (getDevicesWithFolder cfg.otherDevices name);
-    };
+  getHostShares = lib.mapAttrsToList (name: value: {
+    "${name}" =
+      value
+      // {
+        devices = getShareDevices name ++ (getDevicesWithShare cfg.otherDevices name);
+      };
   });
 
   # Configurations
@@ -89,9 +89,9 @@
 
   deviceListFromSystems = lib.mapAttrs (name: config: config.device) allSyncthingConfigs;
 
-  foldersFromHost = host:
-    lib.mkMerge (getHostFolders
-      (getSyncthingConfig target host).paths);
+  sharesFromHost = host:
+    lib.mkMerge (getHostShares
+      (getSyncthingConfig target host).shares);
 in {
   # Options
   options.backpacker.syncthing =
@@ -109,9 +109,9 @@ in {
               };
               description = "Syncthing device configuration";
             };
-            folders = lib.mkOption {
+            shares = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              description = "List of folder names to sync with the device";
+              description = "List of share names to sync with the device";
             };
           };
         });
@@ -155,7 +155,7 @@ in {
           "**/cache"
         ];
 
-        folders = foldersFromHost cfg.hostName;
+        folders = sharesFromHost cfg.hostName;
 
         devices = deviceListFromSystems // deviceListFromOthers;
       };
