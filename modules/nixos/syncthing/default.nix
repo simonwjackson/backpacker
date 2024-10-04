@@ -12,27 +12,73 @@
 
   cfg = config.backpacker.syncthing;
 
-  # Helper functions
-  getSyncthingConfig = arch: host: let
-    syncthingPath = "${cfg.systemsDir}/${arch}/${host}/syncthing.nix";
-  in
-    if builtins.pathExists syncthingPath
-    then import syncthingPath {inherit config host;}
+  # Extracted common functions
+  importConfigIfExists = configPath: host:
+    if builtins.pathExists configPath
+    then import configPath {inherit config host;}
     else null;
 
-  makeNamedConfig = arch: host: let
-    config = getSyncthingConfig arch host;
+  createNamedConfig = importConfigFn: architecture: hostname: let
+    importedConfig = importConfigFn architecture hostname;
   in
-    if config != null
+    if importedConfig != null
     then {
-      name = host;
-      value = config;
+      name = hostname;
+      value = importedConfig;
     }
     else null;
 
+  getConfigsForArchitecture = importConfigFn: architecture: let
+    hostsForArch = getAllHosts cfg.systemsDir architecture;
+    archConfigs = map (createNamedConfig importConfigFn architecture) hostsForArch;
+  in
+    builtins.filter (item: item != null) archConfigs;
+
+  getAllArchitectureConfigs = importConfigFn: let
+    architectures = allArchitectures cfg.systemsDir;
+    allArchConfigs = builtins.concatMap (getConfigsForArchitecture importConfigFn) architectures;
+  in
+    allArchConfigs;
+
+  importSyncthingConfig = architecture: hostname:
+    importConfigIfExists "${cfg.systemsDir}/${architecture}/${hostname}/syncthing.nix" hostname;
+
+  allSyncthingConfigs = builtins.listToAttrs (getAllArchitectureConfigs importSyncthingConfig);
+
+  # Helper function for checking if a device has a specific share
+  deviceHasShare = shareName: deviceConfig: deviceConfig.shares ? "${shareName}";
+
+  # Helper function to get devices for a specific share
+  getDevicesWithShare = shareName:
+    lib.mapAttrsToList
+    (deviceName: deviceConfig:
+      if deviceHasShare shareName deviceConfig
+      then [deviceName]
+      else []);
+
+  getDevicesForShare = shareName:
+    lib.flatten (getDevicesWithShare shareName allSyncthingConfigs);
+
+  # Helper function to filter devices that have the specified share
+  filterDevicesByShare = shareName:
+    lib.filterAttrs
+    (deviceName: deviceConfig: builtins.elem shareName deviceConfig.shares);
+
+  # Main function to get names of devices with the specified share
+  getDeviceNamesForShare = shareName: devices:
+    builtins.attrNames (filterDevicesByShare shareName devices);
+
+  createShareConfig = lib.mapAttrsToList (shareName: shareConfig: {
+    "${shareName}" =
+      shareConfig
+      // {
+        devices = getDevicesForShare shareName ++ (getDeviceNamesForShare shareName cfg.otherDevices);
+      };
+  });
+
   getArchConfigs = arch: let
     hosts = getAllHosts cfg.systemsDir arch;
-    configs = map (makeNamedConfig arch) hosts;
+    configs = map (createNamedConfig arch) hosts;
   in
     builtins.filter (item: item != null) configs;
 
@@ -46,52 +92,13 @@
   isDeviceInShare = shareName: config:
     config.shares ? "${shareName}";
 
-  # Helper function to get devices for a specific share
-  getDevicesForShare = shareName: hostName: config:
-    if isDeviceInShare shareName config
-    then [hostName]
-    else [];
-
-  getShareDevices = shareName: let
-    devicesPerHost =
-      lib.mapAttrsToList
-      (hostName: config: getDevicesForShare shareName hostName config)
-      allSyncthingConfigs;
-  in
-    lib.flatten devicesPerHost;
-
-  # Helper function to check if a device has the specified share
-  deviceHasShare = share: device:
-    builtins.elem share device.shares;
-
-  # Helper function to filter devices that have the specified share
-  filterDevicesWithShare = devices: share:
-    lib.filterAttrs (name: device: deviceHasShare share device) devices;
-
-  # Main function to get names of devices with the specified share
-  getDevicesWithShare = devices: share: let
-    devicesWithShare = filterDevicesWithShare devices share;
-  in
-    builtins.attrNames devicesWithShare;
-
-  getHostShares = lib.mapAttrsToList (name: value: {
-    "${name}" =
-      value
-      // {
-        devices = getShareDevices name ++ (getDevicesWithShare cfg.otherDevices name);
-      };
-  });
-
-  # Configurations
-  allSyncthingConfigs = builtins.listToAttrs getAllArchConfigs;
-
   deviceListFromOthers = lib.mapAttrs (name: value: {id = value.device.id;}) cfg.otherDevices;
 
   deviceListFromSystems = lib.mapAttrs (name: config: config.device) allSyncthingConfigs;
 
   sharesFromHost = host:
-    lib.mkMerge (getHostShares
-      (getSyncthingConfig target host).shares);
+    lib.mkMerge (createShareConfig
+      (importSyncthingConfig target host).shares);
 
   generateWhitelistActivationScript = shares: let
     whitelistedShares = let
