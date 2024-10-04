@@ -92,6 +92,25 @@
   sharesFromHost = host:
     lib.mkMerge (getHostShares
       (getSyncthingConfig target host).shares);
+
+  # New function to generate activation script for whitelisted shares
+  generateWhitelistActivationScript = shares: let
+    whitelistedShares = lib.filterAttrs (name: value: value.whitelist or false) shares;
+    scriptForShare = name: value: ''
+      STIGNORE_PATH="${value.path}/.stignore"
+      if [ -f "$STIGNORE_PATH" ]; then
+        if ! ${pkgs.gnugrep}/bin/grep -q '^[*]$' "$STIGNORE_PATH"; then
+          echo '*' >> "$STIGNORE_PATH"
+          echo "Added '*' to $STIGNORE_PATH"
+        fi
+      else
+        echo '*' > "$STIGNORE_PATH"
+        echo "Created $STIGNORE_PATH with '*'"
+      fi
+    '';
+    scripts = lib.mapAttrsToList scriptForShare whitelistedShares;
+  in
+    builtins.concatStringsSep "\n" scripts;
 in {
   # Options
   options.backpacker.syncthing =
@@ -156,7 +175,6 @@ in {
         ];
 
         folders = sharesFromHost cfg.hostName;
-
         devices = deviceListFromSystems // deviceListFromOthers;
       };
 
@@ -164,6 +182,18 @@ in {
         "--no-default-folder"
         # "--gui-address=0.0.0.0:8384"
       ];
+    };
+
+    # Activation script for whitelisted shares
+    system.activationScripts.syncthingStignore = {
+      supportsDryActivation = true;
+      text = ''
+        if [ "$NIXOS_ACTION" = "dry-activate" ]; then
+          echo "Would ensure the .stignore files end with '*' for whitelisted Syncthing shares"
+        else
+          ${generateWhitelistActivationScript (sharesFromHost cfg.hostName)}
+        fi
+      '';
     };
   };
 }
