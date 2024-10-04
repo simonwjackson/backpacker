@@ -93,22 +93,61 @@
     lib.mkMerge (getHostShares
       (getSyncthingConfig target host).shares);
 
-  # New function to generate activation script for whitelisted shares
   generateWhitelistActivationScript = shares: let
-    whitelistedShares = lib.filterAttrs (name: value: value.whitelist or false) shares;
-    scriptForShare = name: value: ''
+    whitelistedShares = let
+      contents = shares.contents or [];
+      hasWhitelist = item:
+        lib.hasAttrByPath [(builtins.head (builtins.attrNames item)) "whitelist"] item
+        && (builtins.getAttr "whitelist" (builtins.getAttr (builtins.head (builtins.attrNames item)) item)) != false;
+
+      whitelistedContents = lib.filter hasWhitelist contents;
+    in
+      whitelistedContents;
+
+    getFirstKey = item: builtins.head (builtins.attrNames item);
+
+    scriptForShare = item: let
+      key = getFirstKey item;
+      value = builtins.getAttr key item;
+      whitelist = value.whitelist;
+
+      generateWhitelistContent = whitelist:
+        if builtins.isBool whitelist
+        then "*"
+        else let
+          whitelistLines = map (line: "!${line}") whitelist;
+          allLines = whitelistLines ++ ["*"];
+        in
+          builtins.concatStringsSep "\n" allLines;
+    in ''
       STIGNORE_PATH="${value.path}/.stignore"
-      if [ -f "$STIGNORE_PATH" ]; then
-        if ! ${pkgs.gnugrep}/bin/grep -q '^[*]$' "$STIGNORE_PATH"; then
-          echo '*' >> "$STIGNORE_PATH"
-          echo "Added '*' to $STIGNORE_PATH"
-        fi
-      else
-        echo '*' > "$STIGNORE_PATH"
-        echo "Created $STIGNORE_PATH with '*'"
-      fi
+
+      # Create or update .stignore file
+      ${
+        if builtins.isBool whitelist
+        then ''
+          if [ -f "$STIGNORE_PATH" ]; then
+            if ! ${pkgs.gnugrep}/bin/grep -q '^[*]$' "$STIGNORE_PATH"; then
+              echo '*' >> "$STIGNORE_PATH"
+              echo "Added '*' to $STIGNORE_PATH"
+            fi
+          else
+            echo '*' > "$STIGNORE_PATH"
+            echo "Created $STIGNORE_PATH with '*'"
+          fi
+        ''
+        else ''
+          # Handle list of whitelisted patterns
+          cat > "$STIGNORE_PATH" << EOL
+          ${generateWhitelistContent whitelist}
+          EOL
+          echo "Updated $STIGNORE_PATH with whitelist patterns"
+        ''
+      }
     '';
-    scripts = lib.mapAttrsToList scriptForShare whitelistedShares;
+
+    # Generate scripts for all whitelisted shares
+    scripts = map scriptForShare whitelistedShares;
   in
     builtins.concatStringsSep "\n" scripts;
 in {
