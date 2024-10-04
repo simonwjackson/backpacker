@@ -12,7 +12,6 @@
 
   cfg = config.backpacker.syncthing;
 
-  # Extracted common functions
   importConfigIfExists = configPath: host:
     if builtins.pathExists configPath
     then import configPath {inherit config host;}
@@ -45,10 +44,8 @@
 
   allSyncthingConfigs = builtins.listToAttrs (getAllArchitectureConfigs importSyncthingConfig);
 
-  # Helper function for checking if a device has a specific share
   deviceHasShare = shareName: deviceConfig: deviceConfig.shares ? "${shareName}";
 
-  # Helper function to get devices for a specific share
   getDevicesWithShare = shareName:
     lib.mapAttrsToList
     (deviceName: deviceConfig:
@@ -59,12 +56,10 @@
   getDevicesForShare = shareName:
     lib.flatten (getDevicesWithShare shareName allSyncthingConfigs);
 
-  # Helper function to filter devices that have the specified share
   filterDevicesByShare = shareName:
     lib.filterAttrs
     (deviceName: deviceConfig: builtins.elem shareName deviceConfig.shares);
 
-  # Main function to get names of devices with the specified share
   getDeviceNamesForShare = shareName: devices:
     builtins.attrNames (filterDevicesByShare shareName devices);
 
@@ -88,7 +83,6 @@
   in
     allConfigs;
 
-  # Helper function to check if a device has the specified share
   isDeviceInShare = shareName: config:
     config.shares ? "${shareName}";
 
@@ -100,38 +94,45 @@
     lib.mkMerge (createShareConfig
       (importSyncthingConfig target host).shares);
 
-  generateWhitelistActivationScript = shares: let
-    whitelistedShares = let
+  generateActivationScript = shares: let
+    filteredShares = let
       contents = shares.contents or [];
-      hasWhitelist = item:
-        lib.hasAttrByPath [(builtins.head (builtins.attrNames item)) "whitelist"] item
-        && (builtins.getAttr "whitelist" (builtins.getAttr (builtins.head (builtins.attrNames item)) item)) != false;
+      hasListType = item: name:
+        lib.hasAttrByPath [(builtins.head (builtins.attrNames item)) name] item
+        && (builtins.getAttr name (builtins.getAttr (builtins.head (builtins.attrNames item)) item)) != false;
 
-      whitelistedContents = lib.filter hasWhitelist contents;
+      filteredContents = lib.filter (item: hasListType item "whitelist" || hasListType item "blacklist") contents;
     in
-      whitelistedContents;
+      filteredContents;
 
     getFirstKey = item: builtins.head (builtins.attrNames item);
 
     scriptForShare = item: let
       key = getFirstKey item;
       value = builtins.getAttr key item;
-      whitelist = value.whitelist;
+      isWhitelist = value ? whitelist;
+      listType =
+        if isWhitelist
+        then "whitelist"
+        else "blacklist";
+      list = value.${listType};
 
-      generateWhitelistContent = whitelist:
-        if builtins.isBool whitelist
+      generateListContent = list:
+        if builtins.isBool list
         then "*"
         else let
-          whitelistLines = map (line: "!${line}") whitelist;
-          allLines = whitelistLines ++ ["*"];
+          listLines =
+            if isWhitelist
+            then map (line: "!${line}") list ++ ["*"]
+            else list;
         in
-          builtins.concatStringsSep "\n" allLines;
+          builtins.concatStringsSep "\n" listLines;
     in ''
       STIGNORE_PATH="${value.path}/.stignore"
 
       # Create or update .stignore file
       ${
-        if builtins.isBool whitelist
+        if builtins.isBool list
         then ''
           if [ -f "$STIGNORE_PATH" ]; then
             if ! ${pkgs.gnugrep}/bin/grep -q '^[*]$' "$STIGNORE_PATH"; then
@@ -144,72 +145,15 @@
           fi
         ''
         else ''
-          # Handle list of whitelisted patterns
           cat > "$STIGNORE_PATH" << EOL
-          ${generateWhitelistContent whitelist}
+          ${generateListContent list}
           EOL
-          echo "Updated $STIGNORE_PATH with whitelist patterns"
+          echo "Updated $STIGNORE_PATH with ${listType} patterns"
         ''
       }
     '';
 
-    # Generate scripts for all whitelisted shares
-    scripts = map scriptForShare whitelistedShares;
-  in
-    builtins.concatStringsSep "\n" scripts;
-
-  generateBlacklistActivationScript = shares: let
-    blacklistedShares = let
-      contents = shares.contents or [];
-      hasBlacklist = item:
-        lib.hasAttrByPath [(builtins.head (builtins.attrNames item)) "blacklist"] item
-        && (builtins.getAttr "blacklist" (builtins.getAttr (builtins.head (builtins.attrNames item)) item)) != false;
-
-      blacklistedContents = lib.filter hasBlacklist contents;
-    in
-      blacklistedContents;
-
-    getFirstKey = item: builtins.head (builtins.attrNames item);
-
-    scriptForShare = item: let
-      key = getFirstKey item;
-      value = builtins.getAttr key item;
-      blacklist = value.blacklist;
-
-      generateBlacklistContent = blacklist:
-        if builtins.isList blacklist
-        then builtins.concatStringsSep "\\n" (map lib.escapeShellArg blacklist)
-        else "";
-    in ''
-      STIGNORE_PATH="${value.path}/.stignore"
-
-      # Create or update .stignore file with blacklist
-      ${
-        if builtins.isList blacklist
-        then ''
-          if [ -f "$STIGNORE_PATH" ]; then
-            # Ensure each blacklisted pattern is in the file
-            ${builtins.concatStringsSep "\n" (map (pattern: ''
-              if ! ${pkgs.gnugrep}/bin/grep -qFx ${lib.escapeShellArg pattern} "$STIGNORE_PATH"; then
-                echo ${lib.escapeShellArg pattern} >> "$STIGNORE_PATH"
-                echo "Added '${pattern}' to $STIGNORE_PATH"
-              fi
-            '')
-            blacklist)}
-          else
-            echo -e "${generateBlacklistContent blacklist}" > "$STIGNORE_PATH"
-            echo "Created $STIGNORE_PATH with blacklist patterns"
-          fi
-        ''
-        else ''
-          # Do nothing if blacklist is not a list
-          echo "Blacklist is not defined or is set to false for ${key}"
-        ''
-      }
-    '';
-
-    # Generate scripts for all blacklisted shares
-    scripts = map scriptForShare blacklistedShares;
+    scripts = map scriptForShare filteredShares;
   in
     builtins.concatStringsSep "\n" scripts;
 in {
@@ -285,19 +229,16 @@ in {
       ];
     };
 
-    # Activation script for whitelisted and blacklisted shares
     system.activationScripts.syncthingStignore = {
       supportsDryActivation = true;
       text = let
         shares = sharesFromHost cfg.hostName;
-        whitelistScript = generateWhitelistActivationScript shares;
-        blacklistScript = generateBlacklistActivationScript shares;
+        script = generateActivationScript shares;
       in ''
         if [ "$NIXOS_ACTION" = "dry-activate" ]; then
           echo "Would ensure the .stignore files are updated for whitelisted and blacklisted Syncthing shares"
         else
-          ${whitelistScript}
-          ${blacklistScript}
+          ${script}
         fi
       '';
     };
