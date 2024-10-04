@@ -239,6 +239,7 @@ in {
           echo "Would ensure the .stignore files are updated for whitelisted and blacklisted Syncthing shares"
         else
           ${script}
+          : # noop
         fi
       '';
     };
