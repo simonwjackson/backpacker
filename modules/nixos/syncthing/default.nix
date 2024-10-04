@@ -1,3 +1,4 @@
+# Imports and inheritances
 {
   config,
   pkgs,
@@ -12,8 +13,7 @@
 
   cfg = config.backpacker.syncthing;
 
-  deviceListFromOthers = lib.mapAttrs (name: value: {id = value.device.id;}) cfg.otherDevices;
-
+  # Helper functions
   getSyncthingConfig = arch: host: let
     syncthingPath = "${cfg.systemsDir}/${arch}/${host}/syncthing.nix";
   in
@@ -21,40 +21,71 @@
     then import syncthingPath {inherit config host;}
     else null;
 
-  allSyncthingConfigs = builtins.listToAttrs (builtins.concatMap (
-      arch:
-        builtins.filter (item: item != null) (map (
-          host: let
-            config = getSyncthingConfig arch host;
-          in
-            if config != null
-            then {
-              name = host;
-              value = config;
-            }
-            else null
-        ) (getAllHosts cfg.systemsDir arch))
-    )
-    (allArchitectures cfg.systemsDir));
-
-  getFolderDevices = name:
-    lib.flatten (lib.mapAttrsToList
-      (hostName: config: lib.optionals (config.paths ? "${name}") [hostName])
-      allSyncthingConfigs);
-
-  getDevicesWithFolder = devices: folder: let
-    hasFolder = device: builtins.elem folder device.folders;
+  makeNamedConfig = arch: host: let
+    config = getSyncthingConfig arch host;
   in
-    builtins.attrNames (lib.filterAttrs (name: device: hasFolder device) devices);
+    if config != null
+    then {
+      name = host;
+      value = config;
+    }
+    else null;
 
-  getHostFolders =
-    lib.mapAttrsToList
-    (name: value: {
-      "${name}" = {
-        path = value;
-        devices = getFolderDevices name ++ (getDevicesWithFolder cfg.otherDevices name);
-      };
-    });
+  getArchConfigs = arch: let
+    hosts = getAllHosts cfg.systemsDir arch;
+    configs = map (makeNamedConfig arch) hosts;
+  in
+    builtins.filter (item: item != null) configs;
+
+  getAllArchConfigs = let
+    archs = allArchitectures cfg.systemsDir;
+    allConfigs = builtins.concatMap getArchConfigs archs;
+  in
+    allConfigs;
+
+  # Helper function to check if a device has the specified folder
+  isDeviceInFolder = folderName: config:
+    config.paths ? "${folderName}";
+
+  # Helper function to get devices for a specific folder
+  getDevicesForFolder = folderName: hostName: config:
+    if isDeviceInFolder folderName config
+    then [hostName]
+    else [];
+
+  getFolderDevices = folderName: let
+    devicesPerHost =
+      lib.mapAttrsToList
+      (hostName: config: getDevicesForFolder folderName hostName config)
+      allSyncthingConfigs;
+  in
+    lib.flatten devicesPerHost;
+
+  # Helper function to check if a device has the specified folder
+  deviceHasFolder = folder: device:
+    builtins.elem folder device.folders;
+
+  # Helper function to filter devices that have the specified folder
+  filterDevicesWithFolder = devices: folder:
+    lib.filterAttrs (name: device: deviceHasFolder folder device) devices;
+
+  # Main function to get names of devices with the specified folder
+  getDevicesWithFolder = devices: folder: let
+    devicesWithFolder = filterDevicesWithFolder devices folder;
+  in
+    builtins.attrNames devicesWithFolder;
+
+  getHostFolders = lib.mapAttrsToList (name: value: {
+    "${name}" = {
+      path = value;
+      devices = getFolderDevices name ++ (getDevicesWithFolder cfg.otherDevices name);
+    };
+  });
+
+  # Configurations
+  allSyncthingConfigs = builtins.listToAttrs getAllArchConfigs;
+
+  deviceListFromOthers = lib.mapAttrs (name: value: {id = value.device.id;}) cfg.otherDevices;
 
   deviceListFromSystems = lib.mapAttrs (name: config: config.device) allSyncthingConfigs;
 
@@ -62,6 +93,7 @@
     lib.mkMerge (getHostFolders
       (getSyncthingConfig target host).paths);
 in {
+  # Options
   options.backpacker.syncthing =
     options.services.syncthing
     // {
@@ -89,22 +121,23 @@ in {
 
       systemsDir = lib.mkOption {
         type = lib.types.path;
-        description = "";
+        description = "Directory containing system configurations";
       };
 
       user = lib.mkOption {
         type = lib.types.str;
         default = config.backpacker.user.name;
-        description = "";
+        description = "User running Syncthing";
       };
 
       hostName = lib.mkOption {
         type = lib.types.str;
         default = config.networking.hostName;
-        description = "";
+        description = "Hostname for the current system";
       };
     };
 
+  # Configuration
   config = lib.mkIf cfg.enable {
     services.syncthing = {
       enable = true;
@@ -113,7 +146,6 @@ in {
       key = cfg.key;
       cert = cfg.cert;
       user = cfg.user;
-      # BUG: Pass in full dir
       configDir = "/home/${cfg.user}/.config/syncthing";
 
       settings = {
@@ -125,9 +157,7 @@ in {
 
         folders = foldersFromHost cfg.hostName;
 
-        devices =
-          deviceListFromSystems
-          // deviceListFromOthers;
+        devices = deviceListFromSystems // deviceListFromOthers;
       };
 
       extraFlags = [
