@@ -6,7 +6,16 @@
 }: let
   cfg = config.services.syncthingd;
 
-  service = "${config.home.homeDirectory}/.local/bin/start-syncthing.sh";
+  serviceFile = "${config.home.homeDirectory}/.local/bin/start-syncthing.sh";
+  service = ''
+    #!/usr/bin/env bash
+
+    if ! ${pkgs.procps}/bin/ps aux | ${pkgs.gnugrep}/bin/grep -v grep | ${pkgs.gnugrep}/bin/grep -v $$ | ${pkgs.gnugrep}/bin/grep -q "${serviceFile}"; then
+      mkdir -p "$(dirname "${cfg.logFile}")"
+
+      nohup ${cfg.package}/bin/syncthing -no-browser -home="${cfg.homePath}" >> "${cfg.logFile}" 2>&1 &
+    fi
+  '';
 in {
   options.services.syncthingd = {
     enable = lib.mkEnableOption "Syncthing";
@@ -28,27 +37,29 @@ in {
       default = "${cfg.homePath}/syncthing.log";
       description = "The path to the Syncthing log file.";
     };
+
+    # keyFile = lib.mkOption {
+    #   type = lib.types.str;
+    #   description = "The path to the Syncthing key file.";
+    # };
+    #
+    # certFile = lib.mkOption {
+    #   type = lib.types.str;
+    #   description = "The path to the Syncthing certificate file.";
+    # };
   };
 
   config = lib.mkIf cfg.enable {
     home.packages = [cfg.package];
 
-    home.file."${service}" = {
+    home.file."${serviceFile}" = {
       executable = true;
-      text = ''
-        #!${pkgs.bash}/bin/bash
-
-        LOG_FILE="/var/log/http-server.log"
-
-        if ! ${pkgs.procps}/bin/ps aux | ${pkgs.gnugrep}/bin/grep -v grep | ${pkgs.gnugrep}/bin/grep -v $$ | ${pkgs.gnugrep}/bin/grep -q "${service}"; then
-          # Ensure log directory exists
-          mkdir -p "$(dirname "${cfg.logFile}")"
-
-          ${cfg.package}/bin/syncthing -no-browser -home="${cfg.homePath}" >> "${cfg.logFile}"
-        fi
-      '';
+      text = service;
     };
 
-    programs.bash.initExtra = service;
+    programs.bash.initExtra = serviceFile;
+
+    # home.file."${cfg.homePath}/key.pem".source = config.lib.file.mkOutOfStoreSymlink cfg.keyFile;
+    # home.file."${cfg.homePath}/cert.pem".source = config.lib.file.mkOutOfStoreSymlink cfg.certFile;
   };
 }

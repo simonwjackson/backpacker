@@ -430,6 +430,22 @@
         "type": "github"
       }
     },
+    "dnshack": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1690842697,
+        "narHash": "sha256-KFzzPd1Yjko+aBST0yGC7KR4ENitT6fQqaaJZBAMGcs=",
+        "owner": "simonwjackson",
+        "repo": "dnshack",
+        "rev": "58bbba6d2873d3dfdb65699bf0376b1856e74b9f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "simonwjackson",
+        "repo": "dnshack",
+        "type": "github"
+      }
+    },
     "edgy-nvim": {
       "flake": false,
       "locked": {
@@ -1159,27 +1175,6 @@
         "type": "github"
       }
     },
-    "home-manager_5": {
-      "inputs": {
-        "nixpkgs": [
-          "nix-on-droid",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1709445365,
-        "narHash": "sha256-DVv6nd9FQBbMWbOmhq0KVqmlc3y3FMSYl49UXmMcO+0=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "4de84265d7ec7634a69ba75028696d74de9a44a7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
     "hyprcursor": {
       "inputs": {
         "hyprlang": [
@@ -1568,11 +1563,11 @@
         "tmesh": "tmesh"
       },
       "locked": {
-        "lastModified": 1728585343,
-        "narHash": "sha256-E9rnKBAaLFI1udp4rL5q8lUa16dn82QBeClmZpmJjrM=",
+        "lastModified": 1728657106,
+        "narHash": "sha256-DMWqCNaeCRzBxuXAogmMFevVI1fersgko98rcuz9+HU=",
         "owner": "simonwjackson",
         "repo": "mountainous",
-        "rev": "6b1573904a0050a07adc1d99bcfb8b54f3f14e2f",
+        "rev": "0ce6cf06b673223ae230c86f0f19a92557adc0a6",
         "type": "github"
       },
       "original": {
@@ -1720,7 +1715,9 @@
     },
     "nix-on-droid_2": {
       "inputs": {
-        "home-manager": "home-manager_5",
+        "home-manager": [
+          "home-manager"
+        ],
         "nix-formatter-pack": "nix-formatter-pack_2",
         "nixpkgs": [
           "nixpkgs"
@@ -2357,6 +2354,7 @@
     },
     "root": {
       "inputs": {
+        "dnshack": "dnshack",
         "home-manager": "home-manager",
         "mountainous": "mountainous",
         "nix-on-droid": "nix-on-droid_2",
@@ -2499,11 +2497,11 @@
     "secrets_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1728581249,
-        "narHash": "sha256-ftBn4BlLRlHRgvDK6yODX4DAVuLdJQME6VK+EEmkT8A=",
+        "lastModified": 1728687318,
+        "narHash": "sha256-Ux3uI/FeJq22cNTbpEiWcfJUWJSbfHcY6zRnicTNlUw=",
         "owner": "simonwjackson",
         "repo": "secrets",
-        "rev": "b0af13b301b1c937ff7f6157bc5346f3bad59e34",
+        "rev": "afead8da2ef01a0f0e9e0c9349c9d2195a04c6e2",
         "type": "github"
       },
       "original": {
