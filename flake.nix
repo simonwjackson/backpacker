@@ -36,11 +36,9 @@
           useGlobalPkgs = true;
           config = {lib, ...}: {
             imports =
-              (builtins.attrValues inputs.mountainous.homeModules)
-              # ++ [
-              #   # Include all backpacker NixOS modules
-              #   inputs.mountainous.homeModules.eza # Add this line to import the eza module
-              # ]
+              # import all but default
+              builtins.attrValues (builtins.removeAttrs inputs.backpacker.nixosModules ["_default"])
+              ++ []
               ++ (
                 let
                   # Function to find default.nix files, stopping at each found default.nix
