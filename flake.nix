@@ -5,6 +5,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    dnshack = {
+      url = "github:ettom/dnshack";
+      flake = false;
+    };
+
     secrets = {
       url = "github:simonwjackson/secrets";
       flake = false;
@@ -37,8 +42,10 @@
           config = {lib, ...}: {
             imports =
               # import all but default
-              builtins.attrValues (builtins.removeAttrs inputs.backpacker.nixosModules ["_default"])
-              ++ []
+              builtins.attrValues (builtins.removeAttrs inputs.mountainous.homeModules ["_default"])
+              ++ [
+                inputs.mountainous.inputs.agenix.homeManagerModules.age
+              ]
               ++ (
                 let
                   # Function to find default.nix files, stopping at each found default.nix
