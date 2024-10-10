@@ -1,5 +1,10 @@
 {
   inputs = {
+    mountainous = {
+      url = "github:simonwjackson/mountainous";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     secrets = {
       url = "github:simonwjackson/secrets";
       flake = false;
