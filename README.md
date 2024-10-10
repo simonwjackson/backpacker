@@ -14,10 +14,8 @@
       <img alt="License" src="https://img.shields.io/badge/License-MIT-907385605422448742?style=for-the-badge&logo=agpl&color=DDB6F2&logoColor=D9E0EE&labelColor=302D41">
     </a>
     <br/>
-    <img alt="Static Badge" src="https://img.shields.io/badge/NixOS-unstable-d2a8ff?style=for-the-badge&logo=NixOS&logoColor=cba6f7&labelColor=161B22">
-    <a href="https://snowfall.org/guides/lib/quickstart/">
-      <img alt="Static Badge" src="https://img.shields.io/badge/Powered_by-Snowfall-79c0ff?style=for-the-badge&logo=nixos&logoColor=79c0ff&labelColor=161B22">
-    </a>
+    <img alt="Static Badge" src="https://img.shields.io/badge/Nix On Droid-24.05-d2a8ff?style=for-the-badge&logo=NixOS&logoColor=cba6f7&labelColor=161B22">
+
     <br/>
     <a href="https://www.buymeacoffee.com/simonwjackson">
       <img alt="Buy me a coffee" src="https://img.shields.io/badge/Buy%20me%20a%20coffee-grey?style=for-the-badge&logo=buymeacoffee&logoColor=D9E0EE&label=Sponsor&labelColor=302D41&color=ffff99" />
