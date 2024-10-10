@@ -35,23 +35,27 @@
           backupFileExtension = "hm-bak";
           useGlobalPkgs = true;
           config = {lib, ...}: {
-            imports = (
-              let
-                # Function to find default.nix files, stopping at each found default.nix
-                findDefaultNix = dir: let
-                  contents = builtins.readDir dir;
-                  hasDefaultNix = builtins.hasAttr "default.nix" contents && contents."default.nix" == "regular";
-                in
-                  if hasDefaultNix
-                  then [(dir + "/default.nix")]
-                  else let
-                    subdirs = lib.filterAttrs (n: v: v == "directory") contents;
-                    subdirPaths = map (n: dir + "/${n}") (builtins.attrNames subdirs);
+            imports =
+              [
+                inputs.mountainous.homeModules.eza # Add this line to import the eza module
+              ]
+              ++ (
+                let
+                  # Function to find default.nix files, stopping at each found default.nix
+                  findDefaultNix = dir: let
+                    contents = builtins.readDir dir;
+                    hasDefaultNix = builtins.hasAttr "default.nix" contents && contents."default.nix" == "regular";
                   in
-                    lib.concatMap findDefaultNix subdirPaths;
-              in
-                findDefaultNix ./modules/home
-            );
+                    if hasDefaultNix
+                    then [(dir + "/default.nix")]
+                    else let
+                      subdirs = lib.filterAttrs (n: v: v == "directory") contents;
+                      subdirPaths = map (n: dir + "/${n}") (builtins.attrNames subdirs);
+                    in
+                      lib.concatMap findDefaultNix subdirPaths;
+                in
+                  findDefaultNix ./modules/home
+              );
           };
         };
       };
