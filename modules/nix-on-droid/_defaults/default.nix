@@ -12,15 +12,13 @@
   android-integration.termux-wake-unlock.enable = true;
   android-integration.xdg-open.enable = true;
 
-  environment.etc = {
-    "profile".text = lib.mkAfter ''
-      # this is a test
-    '';
-  };
+  terminal.font = "${pkgs.nerdfonts.override {fonts = ["Terminus"];}}/share/fonts/truetype/NerdFonts/TerminessNerdFontMono-Regular.ttf";
 
-  backpacker.programs.mosh = {
-    enable = true;
-    experimentalRemoteIp = "remote";
+  backpacker = {
+    programs.mosh = {
+      enable = true;
+      experimentalRemoteIp = "remote";
+    };
   };
 
   environment = {
@@ -41,7 +39,7 @@
       coreutils
       git
       glibcLocales
-      ncurses # clear
+      ncurses # clear cmd
     ];
 
     sessionVariables = {
@@ -65,6 +63,12 @@
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
+
+  services.syncthingd = {
+    enable = true;
+    keyFile = "${config.user.home}/.config/syncthing/key.pem";
+    certFile = "${config.user.home}/.config/syncthing/cert.pem";
+  };
 
   # Set your time zone
   #time.timeZone = "Europe/Berlin";

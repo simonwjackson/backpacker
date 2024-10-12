@@ -39,6 +39,11 @@
     experimental-features = nix-command flakes
   '';
 
+  services.syncthingd = {
+    # keyFile = config.age.secrets.sobo-syncthing-cert.path;
+    # certFile = config.age.secrets.sobo-syncthing-key.path;
+  };
+
   # Set your time zone
   #time.timeZone = "Europe/Berlin";
 }

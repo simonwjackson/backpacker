@@ -9,8 +9,6 @@ in {
   # Read the changelog before changing this value
   home.stateVersion = "24.05";
 
-  services.syncthingd = {
-    keyFile = config.age.secrets.usu-syncthing-cert.path;
-    certFile = config.age.secrets.usu-syncthing-key.path;
-  };
+  home.file.".config/syncthing/key.pem".source = config.age.secrets.usu-syncthing-key.path;
+  home.file.".config/syncthing/cert.pem".source = config.age.secrets.usu-syncthing-cert.path;
 }

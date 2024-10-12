@@ -119,17 +119,12 @@ in {
     ripgrep
     jq
     yq-go
-    asdf
   ];
 
   services = {
     # http-server = {
     #   enable = true;
     # };
-
-    syncthingd = {
-      enable = true;
-    };
 
     sshd = {
       enable = true;
