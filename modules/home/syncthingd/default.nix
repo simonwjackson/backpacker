@@ -38,15 +38,15 @@ in {
       description = "The path to the Syncthing log file.";
     };
 
-    # keyFile = lib.mkOption {
-    #   type = lib.types.str;
-    #   description = "The path to the Syncthing key file.";
-    # };
-    #
-    # certFile = lib.mkOption {
-    #   type = lib.types.str;
-    #   description = "The path to the Syncthing certificate file.";
-    # };
+    keyFile = lib.mkOption {
+      type = lib.types.str;
+      description = "The path to the Syncthing key file.";
+    };
+
+    certFile = lib.mkOption {
+      type = lib.types.str;
+      description = "The path to the Syncthing certificate file.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -59,7 +59,7 @@ in {
 
     programs.bash.initExtra = serviceFile;
 
-    # home.file."${cfg.homePath}/key.pem".source = config.lib.file.mkOutOfStoreSymlink cfg.keyFile;
-    # home.file."${cfg.homePath}/cert.pem".source = config.lib.file.mkOutOfStoreSymlink cfg.certFile;
+    home.file."${cfg.homePath}/key.pem".source = config.lib.file.mkOutOfStoreSymlink cfg.keyFile;
+    home.file."${cfg.homePath}/cert.pem".source = config.lib.file.mkOutOfStoreSymlink cfg.certFile;
   };
 }

@@ -50,7 +50,6 @@ in {
   };
 
   home.sessionVariables = {
-    # Basic XDG paths
     XDG_CACHE_HOME = "${config.home.homeDirectory}/.cache";
     XDG_CONFIG_HOME = "${config.home.homeDirectory}/.config";
     XDG_DATA_HOME = "${config.home.homeDirectory}/.local/share";
@@ -92,6 +91,7 @@ in {
       enable = true;
       secretMode = "0770";
       secretSymlinks = false;
+      secretsDir = "${inputs.secrets}/agenix";
     };
     atuin = {
       enable = true;
@@ -114,8 +114,6 @@ in {
   in ''
     export DNSHACK_RESOLVER_CMD="${dnshack}/bin/dnshackresolver"
     export LD_PRELOAD="${dnshack}/lib/libdnshackbridge.so"
-    # ${config.age.secrets.aka-syncthing-key.path};
-    # ${inputs.secrets}/agenix
   '';
   # ${builtins.readFile config.age.secrets."user-simonwjackson-github-token".path}
 
