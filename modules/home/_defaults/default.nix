@@ -8,6 +8,10 @@
   inherit (lib) mkDefault mkEnableOption mkOption types mkIf hm mkForce value;
 in {
   programs.bash.enable = true;
+
+  home.file."storage".source = config.lib.file.mkOutOfStoreSymlink "/storage/emulated/0";
+  home.file."snowscape".source = config.lib.file.mkOutOfStoreSymlink "/storage/emulated/0/snowscape";
+
   home.activation.setupAgenix = let
     secretsToJson =
       lib.mapAttrs (
