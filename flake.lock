@@ -1563,11 +1563,11 @@
         "tmesh": "tmesh"
       },
       "locked": {
-        "lastModified": 1728690107,
-        "narHash": "sha256-zrjVaPPm8lHIyx6sgELNSbBS/d11vxDDtqvpcmaGJU8=",
+        "lastModified": 1728695807,
+        "narHash": "sha256-/VxGtYI+asO6ErNlW435kjmccTwS5Nrsa7P21dlOon0=",
         "owner": "simonwjackson",
         "repo": "mountainous",
-        "rev": "a1798d06de2802361255dbfedd8d6be517d5aa87",
+        "rev": "c91e3de5c83d7feb5cff1785b58879178a573d7c",
         "type": "github"
       },
       "original": {
@@ -1969,11 +1969,11 @@
     },
     "nixpkgs_12": {
       "locked": {
-        "lastModified": 1728500571,
-        "narHash": "sha256-dOymOQ3AfNI4Z337yEwHGohrVQb4yPODCW9MDUyAc4w=",
+        "lastModified": 1728627514,
+        "narHash": "sha256-r+SF9AnHrTg+bk6YszoKfV9lgyw+yaFUQe0dOjI0Z2o=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d51c28603def282a24fa034bcb007e2bcb5b5dd0",
+        "rev": "c505ebf777526041d792a49d5f6dd4095ea391a7",
         "type": "github"
       },
       "original": {

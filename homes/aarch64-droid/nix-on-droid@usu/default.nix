@@ -10,7 +10,7 @@ in {
   home.stateVersion = "24.05";
 
   services.syncthingd = {
-    # keyFile = config.age.secrets.usu-syncthing-cert.path;
-    # certFile = config.age.secrets.usu-syncthing-key.path;
+    keyFile = config.age.secrets.usu-syncthing-cert.path;
+    certFile = config.age.secrets.usu-syncthing-key.path;
   };
 }
