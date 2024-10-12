@@ -36,8 +36,6 @@ in {
       # Change to the secrets directory
       cd ${inputs.secrets}/agenix
 
-      echo '${secretsJson}' > ${config.home.homeDirectory}/asdf.txt
-
       # Decrypt secrets
       echo '${secretsJson}' | ${jq} -r 'to_entries[] | "${agenix} --identity ${config.home.homeDirectory}/.ssh/id_rsa --decrypt \(.value.file | split("/") | last) > \(.value.path)"' | while read -r cmd; do
         $DRY_RUN_CMD eval "$cmd"
@@ -80,15 +78,6 @@ in {
         ${config.home.homeDirectory}/.local
     '';
   };
-
-  # home.file."somepass" = {
-  #   executable = false;
-  #   text =
-  #     # bash
-  #     ''
-  #       ${builtins.readFile config.age.secrets.atuin_session.path};
-  #     '';
-  # };
 
   mountainous = {
     agenix = {

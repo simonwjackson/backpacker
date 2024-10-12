@@ -4,6 +4,25 @@
   pkgs,
   ...
 }: {
+  android-integration.am.enable = true;
+  android-integration.termux-open.enable = true;
+  android-integration.termux-open-url.enable = true;
+  android-integration.termux-reload-settings.enable = true;
+  android-integration.termux-wake-lock.enable = true;
+  android-integration.termux-wake-unlock.enable = true;
+  android-integration.xdg-open.enable = true;
+
+  environment.etc = {
+    "profile".text = lib.mkAfter ''
+      # this is a test
+    '';
+  };
+
+  backpacker.programs.mosh = {
+    enable = true;
+    experimentalRemoteIp = "remote";
+  };
+
   environment = {
     # Backup etc files instead of failing to activate generation if a file already exists in /etc
     etcBackupExtension = ".bak";
@@ -22,16 +41,9 @@
       coreutils
       git
       glibcLocales
-      (symlinkJoin {
-        name = "mosh-wrapped";
-        paths = [mosh];
-        buildInputs = [makeWrapper];
-        postBuild = ''
-          wrapProgram $out/bin/mosh \
-            --add-flags "--experimental-remote-ip=remote"
-        '';
-      })
+      ncurses # clear
     ];
+
     sessionVariables = {
       # Fix locale (perl apps panic without it)
       LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
