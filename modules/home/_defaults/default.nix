@@ -125,24 +125,5 @@ in {
     # http-server = {
     #   enable = true;
     # };
-
-    sshd = {
-      enable = true;
-      port = 2222;
-      extraConfig = ''
-        # Allow only nix-on-droid user
-        AllowUsers nix-on-droid
-
-        Match Address !100.64.0.0/10,!172.16.0.0/12,!192.18.0.0/16
-            PubkeyAuthentication no
-      '';
-      authorizedKeys = let
-        keysDir = "${inputs.secrets}/keys/users";
-        isPublicKey = name: type: type == "regular" && lib.hasSuffix ".pub" name;
-        pubKeyFiles = lib.filterAttrs isPublicKey (builtins.readDir keysDir);
-        keys = lib.mapAttrsToList (name: _: builtins.readFile (keysDir + "/${name}")) pubKeyFiles;
-      in
-        builtins.concatStringsSep "\n" keys;
-    };
   };
 }

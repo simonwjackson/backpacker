@@ -52,9 +52,11 @@ in {
       syncthing-cli
     ];
 
-    environment.etc."profile".text = lib.mkAfter ''
-      ${service}
-    '';
+    environment.extraProfile = [
+      ''
+        ${service}
+      ''
+    ];
 
     build.activation.installSyncthingd = ''
       #!/usr/bin/env bash
