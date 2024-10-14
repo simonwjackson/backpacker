@@ -16,6 +16,7 @@
       '';
     };
   };
+
   config = {
     android-integration.am.enable = true;
     android-integration.termux-open.enable = true;
@@ -53,6 +54,7 @@
         git
         glibcLocales
         ncurses # clear cmd
+        cowsay
       ];
 
       sessionVariables = {
@@ -84,8 +86,6 @@
     services = {
       syncthingd = {
         enable = true;
-        # keyFile = "${config.user.home}/.config/syncthing/key.pem";
-        # certFile = "${config.user.home}/.config/syncthing/cert.pem";
       };
 
       sshd = {

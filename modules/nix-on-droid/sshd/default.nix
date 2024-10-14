@@ -10,7 +10,7 @@
   startSshdScript = pkgs.writeScript "start-sshd" ''
     #!/usr/bin/env bash
 
-    if [ ! -f /tmp/sshd.pid ]; then
+    if ! ${pkgs.procps}/bin/ps aux | ${pkgs.gnugrep}/bin/grep -v grep | ${pkgs.gnugrep}/bin/grep -v $$ | ${pkgs.gnugrep}/bin/grep -q "${pkgs.openssh}/bin/sshd"; then
       ${pkgs.openssh}/bin/sshd -f /etc/ssh/sshd_config -E /tmp/sshd.log
     fi
   '';
@@ -42,6 +42,8 @@ in {
       pkgs.openssh
     ];
 
+    environment.etc."ssh/authorized_keys".text = cfg.authorizedKeys;
+
     environment.etc."ssh/sshd_config".text = ''
       HostKey /etc/ssh/ssh_host_rsa_key
       Port ${toString cfg.port}
@@ -57,45 +59,17 @@ in {
       ${cfg.extraConfig}
     '';
 
-    environment.extraProfile = [
-      ''
-        ${startSshdScript}
-      ''
-    ];
+    environment.extraProfile = ["${startSshdScript}"];
 
     build.activation.setupSshdScript = ''
       #!/usr/bin/env bash
+
       $DRY_RUN_CMD mkdir -p /etc/ssh
 
       # Generate SSH host key if it doesn't exist
       if [ ! -f "/etc/ssh/ssh_host_rsa_key" ]; then
         $DRY_RUN_CMD ${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N ""
       fi
-
-      # Set up authorized_keys file
-      AUTH_KEYS_FILE="/etc/ssh/authorized_keys"
-      $DRY_RUN_CMD touch "$AUTH_KEYS_FILE"
-
-      # Read existing keys into an array
-      IFS=$'\n' read -d "" -r -a existing_keys < "$AUTH_KEYS_FILE"
-
-      # Add new keys, avoiding duplicates
-      echo "${cfg.authorizedKeys}" | while read -r new_key; do
-        if [[ -n "$new_key" ]]; then
-          is_duplicate=0
-          for existing_key in "''${existing_keys[@]}"; do
-            if [[ "$existing_key" == "$new_key" ]]; then
-              is_duplicate=1
-              break
-            fi
-          done
-          if [[ $is_duplicate -eq 0 ]]; then
-            $DRY_RUN_CMD echo "$new_key" >> "$AUTH_KEYS_FILE"
-          fi
-        fi
-      done
-
-      $DRY_RUN_CMD chmod 600 "$AUTH_KEYS_FILE"
     '';
   };
 }

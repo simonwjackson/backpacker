@@ -6,11 +6,37 @@
   ...
 }: let
   inherit (lib) mkDefault mkEnableOption mkOption types mkIf hm mkForce value;
+
+  storage = "/storage/emulated/0";
+  snowscape = "${storage}/snowscape";
 in {
   programs.bash.enable = true;
 
-  home.file."storage".source = config.lib.file.mkOutOfStoreSymlink "/storage/emulated/0";
-  home.file."snowscape".source = config.lib.file.mkOutOfStoreSymlink "/storage/emulated/0/snowscape";
+  home.file."storage".source = config.lib.file.mkOutOfStoreSymlink storage;
+  home.file."snowscape".source = config.lib.file.mkOutOfStoreSymlink snowscape;
+
+  home.activation.createSnowscape =
+    # TODO: create keys in agenix.d then symlink them to agenix
+    hm.dag.entryBefore ["checkLinkTargets"] ''
+      #!/usr/bin/env bash
+
+      $DRY_RUN_CMD mkdir -p "${snowscape}"
+    '';
+
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      "usu naka sobo bandi" = {
+        user = "nix-on-droid";
+        port = 2222;
+      };
+
+      "aka asahi fiji haku kita nyu rakku unzen yari zao" = {
+        user = "simonwjackson";
+        port = 22;
+      };
+    };
+  };
 
   home.activation.setupAgenix = let
     secretsToJson =

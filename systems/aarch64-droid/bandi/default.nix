@@ -7,25 +7,8 @@
   # Simply install just the packages
   environment.packages = with pkgs; [
     vim
-    procps
-    killall
-    diffutils
-    findutils
-    utillinux
-    tzdata
-    hostname
-    gnugrep
-    gnupg
-    gnused
-    gnutar
-    bzip2
-    gzip
-    xz
-    zip
-    unzip
     openssh
     git
-    hello
   ];
 
   # Backup etc files instead of failing to activate generation if a file already exists in /etc
@@ -41,8 +24,8 @@
 
   # TODO: add agenix
   services.syncthingd = {
-    certFile = "${config.user.home}/.local/run/agenix/sobo-syncthing-cert";
-    keyFile = "${config.user.home}/.local/run/agenix/sobo-syncthing-key";
+    certFile = "${config.user.home}/.local/run/agenix/bandi-syncthing-cert";
+    keyFile = "${config.user.home}/.local/run/agenix/bandi-syncthing-key";
   };
 
   # Set your time zone

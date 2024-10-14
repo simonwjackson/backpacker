@@ -52,11 +52,7 @@ in {
       syncthing-cli
     ];
 
-    environment.extraProfile = [
-      ''
-        ${service}
-      ''
-    ];
+    environment.extraProfile = ["${service}"];
 
     build.activation.installSyncthingd = ''
       #!/usr/bin/env bash

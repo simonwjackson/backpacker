@@ -39,9 +39,8 @@
     experimental-features = nix-command flakes
   '';
 
+  # TODO: add agenix
   services.syncthingd = {
-    # keyFile = config.age.secrets.usu-syncthing-cert.path;
-    # certFile = config.age.secrets.usu-syncthing-key.path;
     certFile = "${config.user.home}/.local/run/agenix/usu-syncthing-cert";
     keyFile = "${config.user.home}/.local/run/agenix/usu-syncthing-key";
   };
